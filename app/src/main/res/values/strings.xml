@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="todo">TODO</string>
+    <string name="help_me">HELP ME</string>
+    <string name="localisation">LOCALISATION</string>
+    <string name="taches">TACHES</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
