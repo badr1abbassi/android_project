@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         localisation=findViewById(R.id.buttonLocalisation);
         sante=findViewById(R.id.buttonHealth);
+        camera=findViewById(R.id.buttonCamera);
 
         sante.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
             myClick(v);
         }
     });
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myClick(v);
+            }
+        });
+
+
     }
 
     private	void	myClick(View	v) {
@@ -60,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonHealth:
                     getAlarm(v);
+                    break;
+                case R.id.buttonCamera:
+                    getScanner(v);
                     break;
                 default:
                     Toast.makeText(this, v.getId()+"", Toast.LENGTH_SHORT).show();
@@ -78,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public  void getAlarm(View v){
         Intent intent =new Intent(this,Alarm.class);
+        this.startActivity(intent);
+
+    }
+    public  void getScanner(View v){
+        Intent intent =new Intent(this,Scanner.class);
         this.startActivity(intent);
 
     }

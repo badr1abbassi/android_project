@@ -1,8 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">HELP ME</string>
     <string name="todo">TODO</string>
     <string name="help_me">HELP ME</string>
     <string name="localisation">LOCALISATION</string>
     <string name="taches">TACHES</string>
     <string name="title_activity_maps">Map</string>
+    <string name="txt_message">Texte</string>
+    <string name="image_preview">L\'image</string>
+    <string name="r_sultat">Le texte d\'image</string>
+    <string name="title_activity_scanner">Reconnaissance du texte</string>
+    <string name="camera">IMAGE AU TEXTE</string>
 </resources>
