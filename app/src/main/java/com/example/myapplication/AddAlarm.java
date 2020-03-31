@@ -10,10 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,16 +30,15 @@ import java.util.Calendar;
      private PendingIntent pendingIntent;
      private TimePicker alarmTimePicker;
      private static AddAlarm inst;
-     private TextView alarmTextView;
+     private EditText alarmTextView;
      TextView date;
      Calendar c;
-
 
      private String alarmeDate,alarmeTime;
      private boolean repeat;
      private String message;
      private String status;
-
+    public static int ALARMEID=0;
 
 
      public static AddAlarm instance() {
@@ -80,9 +81,18 @@ import java.util.Calendar;
         c.set(Calendar.MINUTE,alarmTimePicker.getCurrentMinute());
         c.set(Calendar.SECOND,0);
         alarmInfo.setCalendar(c);
-        startAlarm(c);
 
-    }
+        if(TextUtils.isEmpty(alarmTextView.getText())){
+            alarmTextView.setError( "medicament obligatoire !" );
+        }else {
+            Alarm.listeAlarmes.add(alarmInfo);
+            alarmInfo.setId(++ALARMEID);
+            startAlarm(alarmInfo);
+            Intent intent = new Intent(this, Alarm.class);
+            this.startActivity(intent);
+        }
+        }
+
     public void onToggleClicked(View view) {
         if (((ToggleButton) view).isChecked()) {
             repeat=true;
@@ -91,7 +101,6 @@ import java.util.Calendar;
             repeat=false;
         }
     }
-
      @Override
      public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         c=Calendar.getInstance();
@@ -102,12 +111,13 @@ import java.util.Calendar;
         date.setText(currentDate);
         alarmeDate=currentDate;
      }
-     public void startAlarm(Calendar c){
+     public void startAlarm(AlarmInfo alarmInfo){
         AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent =new Intent(this,AlertReceiver.class);
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,1,intent,0);
+        intent.putExtra("medicament",alarmInfo.getMessage());
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,alarmInfo.getId(),intent,0);
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-             alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+             alarmManager.setExact(AlarmManager.RTC_WAKEUP,alarmInfo.getCalendar().getTimeInMillis(),pendingIntent);
          }
          Toast.makeText(this, "Alarme ON", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
      }
@@ -117,6 +127,5 @@ import java.util.Calendar;
          PendingIntent pendingIntent=PendingIntent.getBroadcast(this,1,intent,0);
         alarmManager.cancel(pendingIntent);
          Toast.makeText(this, "Alarme OFF", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
-
      }
  }

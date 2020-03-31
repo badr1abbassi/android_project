@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.util.Vector;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -97,7 +98,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     builder.setNegativeButton("modifier", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                             /*Intent intent =new Intent(itemView.getContext(),MapsActivity.class);
                             intent.putExtra("etab",currentEtab);
                             itemView.getContext().startActivity(intent);
@@ -117,7 +117,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             currentAlarm = alarm;
             message.setText(currentAlarm.getMessage());
             //time.setText(currentAlarm.getDate()+" "+currentAlarm.getTime());
-            time.setText(currentAlarm.getStatus());
+            String currentDate= DateFormat.getDateInstance(DateFormat.LONG).format(currentAlarm.getCalendar().getTime());
+            time.setText(currentDate);
             img.setImageResource(R.drawable.alarm);
             img.setContentDescription("alarm");
 

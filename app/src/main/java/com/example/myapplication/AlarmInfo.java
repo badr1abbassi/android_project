@@ -1,9 +1,11 @@
 package com.example.myapplication;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class AlarmInfo {
+public class AlarmInfo implements Serializable {
 
+    private int id;
     private Calendar calendar;
     private boolean repeat;
     private String message;
@@ -16,6 +18,14 @@ public class AlarmInfo {
         this.repeat = repeat;
         this.message = message;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Calendar getCalendar() {

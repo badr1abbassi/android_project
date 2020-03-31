@@ -39,9 +39,6 @@ public class alarmFragment extends Fragment {
     }
 
     public void showText() {
-
-
-        Vector<AlarmInfo> l=new Vector<>();
-        rv.setAdapter(new MyAdapter(l));
+        rv.setAdapter(new MyAdapter(Alarm.listeAlarmes));
     }
 }

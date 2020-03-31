@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Vector;
+
 public class Alarm extends AppCompatActivity {
 
     Button addAlarm;
+    public static Vector<AlarmInfo> listeAlarmes=new Vector<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,4 +31,5 @@ public class Alarm extends AppCompatActivity {
         Intent intent =new Intent(this,AddAlarm.class);
         this.startActivity(intent);
     }
+
 }
