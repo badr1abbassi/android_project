@@ -32,6 +32,15 @@
                     android:padding="5dp">
 
 
+                    <Button
+                        android:id="@+id/bt_convert"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="@string/convert"
+                        android:textAlignment="center" />
+
                     <EditText
                         android:id="@+id/resultEt"
                         android:layout_width="match_parent"
@@ -42,6 +51,8 @@
                         android:inputType="textMultiLine"
                         android:padding="5sp"
                         android:textSize="30sp" />
+
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

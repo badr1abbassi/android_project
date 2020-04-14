@@ -9,5 +9,6 @@
     <string name="image_preview">L\'image</string>
     <string name="r_sultat">Le texte d\'image</string>
     <string name="title_activity_scanner">Reconnaissance du texte</string>
-    <string name="camera">IMAGE AU TEXTE</string>
+    <string name="camera">IMAGE AU PAROLE</string>
+    <string name="convert">Lire le texte</string>
 </resources>
