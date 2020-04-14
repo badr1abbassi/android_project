@@ -18,9 +18,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -32,9 +35,13 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.Locale;
+
 public class Scanner extends AppCompatActivity {
     EditText mResultET;
     ImageView mPreviewIv;
+    Button btConvert;
+    TextToSpeech textToSpeech;
 
     private static  final int CAMERA_REQUEST_CODE = 200;
     private static  final int STORAGE_REQUEST_CODE = 400;
@@ -56,10 +63,29 @@ public class Scanner extends AppCompatActivity {
          */
         mResultET = findViewById(R.id.resultEt);
         mPreviewIv = findViewById(R.id.imageIv);
+        btConvert = findViewById(R.id.bt_convert);
 
         cameraPermission = new String [] {Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        textToSpeech = new TextToSpeech(getApplicationContext(),
+                new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if(status == TextToSpeech.SUCCESS){
+                            Locale loc = new Locale("ar");
+                            int lang= textToSpeech.setLanguage(loc);
+                        }
+                    }
+                });
+
+        btConvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = mResultET.getText().toString();
+                int speech = textToSpeech.speak(s,TextToSpeech.QUEUE_FLUSH,null);
+            }
+        });
     }
 
     @Override
