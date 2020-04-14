@@ -73,8 +73,7 @@ public class Scanner extends AppCompatActivity {
                     @Override
                     public void onInit(int status) {
                         if(status == TextToSpeech.SUCCESS){
-                            Locale loc = new Locale("ar");
-                            int lang= textToSpeech.setLanguage(loc);
+                            int lang= textToSpeech.setLanguage(Locale.FRANCE);
                         }
                     }
                 });
