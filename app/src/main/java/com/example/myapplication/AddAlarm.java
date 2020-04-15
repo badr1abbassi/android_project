@@ -1,25 +1,45 @@
  package com.example.myapplication;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -39,8 +59,11 @@ import java.util.Calendar;
      private String message;
      private String status;
     public static int ALARMEID=0;
-
-
+     String cameraPermission[];
+     String storagePermission[];
+     Uri image_uri;
+     ImageView image;
+     Uri resultUri;
      public static AddAlarm instance() {
          return inst;
      }
@@ -49,6 +72,15 @@ import java.util.Calendar;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
+       image=findViewById(R.id.imageIv2);
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageImportDialog();
+            }
+        });
+
         alarmTimePicker = (TimePicker) findViewById(R.id.alarmTimePicker);
         alarmTextView=findViewById(R.id.alarmText);
         date=findViewById(R.id.dateMessage);
@@ -68,7 +100,96 @@ import java.util.Calendar;
             }
         });
     }
-    public void setAlarm(View v){
+     private void showImageImportDialog() {
+         String[] items = {" Camera", " Gallery"};
+         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+         dialog.setTitle("Choisir une image");
+         dialog.setItems(items, new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
+                 if(which == 0) {
+                     if (!checkCameraPermission()) {
+                         requestCameraPermissions();
+                     }
+                     else {
+                         pickCamera();
+                     }
+                 }
+                 if( which == 1) {
+                     if (!checkStoragePermission()) {
+                         requestStoragePermissions();
+                     }
+                     else {
+                         pickGallery();
+                     }
+
+                 }
+             }
+         });
+         dialog.create().show();
+     }
+     private boolean checkCameraPermission(){
+         boolean result = ContextCompat.checkSelfPermission(this,
+                 Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+         boolean result1 = ContextCompat.checkSelfPermission(this,
+                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+         return result && result1;
+     }
+     private void requestCameraPermissions() {
+         ActivityCompat.requestPermissions(this,cameraPermission, Scanner.CAMERA_REQUEST_CODE);
+     }
+     private boolean checkStoragePermission() {
+         return ContextCompat.checkSelfPermission(this,
+                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+     }
+
+     private void requestStoragePermissions(){
+         ActivityCompat.requestPermissions(this,storagePermission, Scanner.STORAGE_REQUEST_CODE);
+     }
+
+     private void pickCamera() {
+         ContentValues values = new ContentValues();
+         values.put(MediaStore.Images.Media.TITLE,"NewPic");
+         values.put(MediaStore.Images.Media.DESCRIPTION,"Image To text");
+         image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+         startActivityForResult(cameraIntent, Scanner.IMAGE_PICK_CAMERA_CODE);
+     }
+     private void pickGallery(){
+         Intent intent = new Intent(Intent.ACTION_PICK);
+         intent.setType("image/*");
+         startActivityForResult(intent, Scanner.IMAGE_PICK_GALLERY_CODE);
+     }
+
+     @Override
+     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+         super.onActivityResult(requestCode, resultCode, data);
+         if (resultCode == RESULT_OK) {
+             if (requestCode == Scanner.IMAGE_PICK_GALLERY_CODE) {
+                 CropImage.activity(data.getData())
+                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
+             }
+             if (requestCode == Scanner.IMAGE_PICK_CAMERA_CODE) {
+                 CropImage.activity(image_uri)
+                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
+             }
+         }
+         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+             CropImage.ActivityResult result = CropImage.getActivityResult(data);
+             if (resultCode == RESULT_OK) {
+                 resultUri = result.getUri();
+                 image.setImageURI(resultUri);
+
+             }
+             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+                 Exception error = result.getError();
+                 Toast.makeText(this, ""+error, Toast.LENGTH_SHORT).show();
+             }
+         }
+     }
+
+     public void setAlarm(View v){
          message=alarmTextView.getText().toString();
         alarmeTime= alarmTimePicker.getCurrentHour() + ":" + alarmTimePicker.getCurrentMinute();
         AlarmInfo alarmInfo=new AlarmInfo();
@@ -81,7 +202,7 @@ import java.util.Calendar;
         c.set(Calendar.MINUTE,alarmTimePicker.getCurrentMinute());
         c.set(Calendar.SECOND,0);
         alarmInfo.setCalendar(c);
-
+         alarmInfo.setImage(resultUri);
         if(TextUtils.isEmpty(alarmTextView.getText())){
             alarmTextView.setError( "medicament obligatoire !" );
         }else {
@@ -114,7 +235,8 @@ import java.util.Calendar;
      public void startAlarm(AlarmInfo alarmInfo){
         AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent =new Intent(this,AlertReceiver.class);
-        intent.putExtra("medicament",alarmInfo.getMessage());
+        intent.putExtra("title",alarmInfo.getMessage());
+         intent.putExtra("uriImage",alarmInfo.getImage().toString());
         PendingIntent pendingIntent=PendingIntent.getBroadcast(this,alarmInfo.getId(),intent,0);
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
              alarmManager.setExact(AlarmManager.RTC_WAKEUP,alarmInfo.getCalendar().getTimeInMillis(),pendingIntent);

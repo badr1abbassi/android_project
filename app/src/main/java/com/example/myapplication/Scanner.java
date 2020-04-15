@@ -43,10 +43,10 @@ public class Scanner extends AppCompatActivity {
     Button btConvert;
     TextToSpeech textToSpeech;
 
-    private static  final int CAMERA_REQUEST_CODE = 200;
-    private static  final int STORAGE_REQUEST_CODE = 400;
-    private static  final int IMAGE_PICK_GALLERY_CODE = 1000;
-    private static  final int IMAGE_PICK_CAMERA_CODE = 1001;
+    public static  final int CAMERA_REQUEST_CODE = 200;
+    public static  final int STORAGE_REQUEST_CODE = 400;
+    public static  final int IMAGE_PICK_GALLERY_CODE = 1000;
+    public static  final int IMAGE_PICK_CAMERA_CODE = 1001;
 
     String cameraPermission[];
     String storagePermission[];
