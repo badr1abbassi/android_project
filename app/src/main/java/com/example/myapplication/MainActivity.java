@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
     String lattitude,longitude;
+    private static final int REQUEST_CALL = 1;
+    private static final String number = "+212625733640";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         localisation=findViewById(R.id.buttonLocalisation);
         sante=findViewById(R.id.buttonHealth);
         camera=findViewById(R.id.buttonCamera);
+        appel = findViewById(R.id.buttonAppel);
 
         sante.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        appel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myClick(v);
+            }
+        });
+
 
     }
 
@@ -73,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonCamera:
                     getScanner(v);
+                    break;
+                case R.id.buttonAppel:
+                   getAppel(v);
                     break;
                 default:
                     Toast.makeText(this, v.getId()+"", Toast.LENGTH_SHORT).show();
@@ -156,6 +171,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, "activer gps", Toast.LENGTH_SHORT).show();
     }
-
+    public void getAppel(View v){
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+        } else {
+            String dial = "tel:" + number;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+        }
+    }
 
 }
