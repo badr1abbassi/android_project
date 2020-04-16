@@ -1,27 +1,20 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         sante=findViewById(R.id.buttonHealth);
         camera=findViewById(R.id.buttonCamera);
         appel = findViewById(R.id.buttonAppel);
+        taches = findViewById(R.id.buttonTaches);
 
         sante.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        taches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myClick(v);
+            }
+        });
+
 
     }
 
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonAppel:
                    getAppel(v);
+                    break;
+                case R.id.buttonTaches:
+                    getTache(v);
                     break;
                 default:
                     Toast.makeText(this, v.getId()+"", Toast.LENGTH_SHORT).show();
@@ -180,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
             String dial = "tel:" + number;
             startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
         }
+    }
+    public void getTache(View v){
+        Intent intent =new Intent(this, TacheActivity.class);
+        this.startActivity(intent);
     }
 
 }

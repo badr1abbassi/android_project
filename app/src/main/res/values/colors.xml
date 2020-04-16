@@ -5,4 +5,14 @@
     <color name="colorAccent">#03A9F4</color>
     <color name="colorback">#A5B9C4</color>
 
+    <color name="colorPrimaryTache">#FF9800</color>
+    <color name="colorPrimaryDarkTache">#F57C00</color>
+    <color name="colorAccentTache">#ffa008</color>
+    <color name="view_backg_colorTache">#c7c7C7</color>
+
+    <!--  colors for dark theme -->
+    <color name="colorPrimary_dark">#212121</color>
+    <color name="colorAccent_dark" >#FF9800</color>
+    <color name="colorPrimaryDark_dark" >#DE000000</color>
+
 </resources>
