@@ -8,11 +8,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 
 import androidx.core.app.NotificationCompat;
+
+import java.io.IOException;
 
 public class NotificationHelper extends ContextWrapper {
     public static final String channelID="chanelID";
@@ -40,14 +45,20 @@ public class NotificationHelper extends ContextWrapper {
         }
         return manager;
     }
-    public NotificationCompat.Builder getChannelNotification(String title,String message){
+    public NotificationCompat.Builder getChannelNotification(String title, String stringUri) throws IOException {
         long[] v = {500,1000};
+        Uri uri;
+        uri = Uri.parse(stringUri);
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
+
+        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+        style.setBigContentTitle("c'est le temp de prendre votre medicament");
+        style.setSummaryText(title);
+        style.bigPicture(bitmap);
         return new NotificationCompat.Builder(getApplicationContext(),channelID)
-                .setContentTitle(title)
-                .setContentText(message)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setVibrate(v)
                 .setSound( RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), AudioManager.STREAM_MUSIC)
-                ;
+                .setStyle(style);
     }
 }

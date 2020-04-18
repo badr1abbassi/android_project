@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import android.net.Uri;
+
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Calendar;
 
 public class AlarmInfo implements Serializable {
@@ -10,14 +13,25 @@ public class AlarmInfo implements Serializable {
     private boolean repeat;
     private String message;
     private String status;
+    private Uri image;
 
     public AlarmInfo(){}
 
-    public AlarmInfo(Calendar calendar, boolean repeat, String message, String status) {
+    public AlarmInfo(int id, Calendar calendar, boolean repeat, String message, String status, Uri image) {
+        this.id = id;
         this.calendar = calendar;
         this.repeat = repeat;
         this.message = message;
         this.status = status;
+        this.image = image;
+    }
+
+    public Uri getImage() {
+        return image;
+    }
+
+    public void setImage(Uri image) {
+        this.image = image;
     }
 
     public int getId() {

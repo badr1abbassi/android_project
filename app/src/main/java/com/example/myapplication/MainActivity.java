@@ -18,8 +18,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
     String lattitude,longitude;
+
+    private FusedLocationProviderClient client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
 
         localisation=findViewById(R.id.buttonLocalisation);
@@ -80,6 +84,30 @@ public class MainActivity extends AppCompatActivity {
             }
     }
 
+    public void getPosition2(View v){
+        getPermissionLocalisation();
+        //if(ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED) {
+            client.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        Toast.makeText(MainActivity.this, "localisaton:" + location, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "localisaton: NULL", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        /*}else{
+            Toast.makeText(MainActivity.this, "localisaton: permission", Toast.LENGTH_SHORT).show();
+            getPermissionLocalisation();
+        }*/
+    }
+    public void getPermissionLocalisation(){
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+    }
+
+
+
     public void getPosition(View view) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -101,11 +129,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
                 (MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
         } else {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -137,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
                 Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
-
             }
             if(longitude!=null && lattitude !=null){
                 Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + lattitude

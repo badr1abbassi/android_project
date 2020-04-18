@@ -89,7 +89,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
                                     Toast.makeText(itemView.getContext(),	"supp "+currentAlarm.getMessage(),
                                             Toast.LENGTH_SHORT).show();
-
                                     /*MainActivity.mydatabase.etabDao().deleteEtabByName(currentEtab.getName());
                                     Intent intent =new Intent(itemView.getContext(),Mylist.class);
                                     itemView.getContext().startActivity(intent);*/
@@ -117,9 +116,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             currentAlarm = alarm;
             message.setText(currentAlarm.getMessage());
             //time.setText(currentAlarm.getDate()+" "+currentAlarm.getTime());
-            String currentDate= DateFormat.getDateInstance(DateFormat.LONG).format(currentAlarm.getCalendar().getTime());
+            String currentDate =(String) android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss ", currentAlarm.getCalendar());
             time.setText(currentDate);
-            img.setImageResource(R.drawable.alarm);
+            img.setImageURI(currentAlarm.getImage());
+            //img.setImageResource(R.drawable.alarm);
             img.setContentDescription("alarm");
 
         }
