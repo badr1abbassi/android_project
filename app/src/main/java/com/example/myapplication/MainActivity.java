@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -14,6 +15,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -182,6 +186,23 @@ public class MainActivity extends AppCompatActivity {
     protected void buildAlertMessageNoGps() {
 
         Toast.makeText(this, "activer gps", Toast.LENGTH_SHORT).show();
+    }
+
+    // MENU
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.dec) {
+            FirebaseAuth.getInstance().signOut();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

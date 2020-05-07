@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
@@ -64,14 +66,15 @@ public class Scanner extends AppCompatActivity {
         mResultET = findViewById(R.id.resultEt);
         mPreviewIv = findViewById(R.id.imageIv);
         btConvert = findViewById(R.id.bt_convert);
-
         cameraPermission = new String [] {Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
         textToSpeech = new TextToSpeech(getApplicationContext(),
                 new TextToSpeech.OnInitListener() {
                     @Override
                     public void onInit(int status) {
+
                         if(status == TextToSpeech.SUCCESS){
                             int lang= textToSpeech.setLanguage(Locale.FRANCE);
                         }
