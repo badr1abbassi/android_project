@@ -17,4 +17,17 @@
     <string name="share_note">Share Note</string>
     <string name="delete_notes">Delete Notes</string>
     <string name="no_notes">No Notes !</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="email">Email</string>
+    <string name="s_identifier">S\'identifier</string>
+    <string name="vous_n_avez_pas_de_compte_s_inscrire">Vous n\'avez pas de compte? S\'inscrire</string>
+    <string name="appel">APPEL</string>
+
+    <string name="aider_moi">AIDER MOI</string>
+    <string name="sante">SANTE</string>
+
+    <string-array name="role">
+        <item>Pere</item>
+        <item>Fils</item>
+    </string-array>
 </resources>
