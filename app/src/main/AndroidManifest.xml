@@ -24,20 +24,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Inscription"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".Authentification"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".ProfilActivity"></activity>
+        <activity
+            android:name=".Inscription" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".Authentification" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".AddAlarm" />
-        <activity android:name=".EditNoteActivity"></activity>
+        <activity android:name=".EditNoteActivity" />
         <activity android:name=".TacheActivity" />
-        <activity android:name=".AddAlarm" />
         <activity android:name=".alarmFragment" />
         <activity android:name=".Alarm" />
         <!--
@@ -55,21 +55,15 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Scanner"
+        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".Scanner"
             android:label="@string/title_activity_scanner" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/AppTheme" />
 
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/AppTheme"/>
-
-        <receiver android:name=".AlertReceiver"/>
+        <receiver android:name=".AlertReceiver" />
     </application>
 
 </manifest>

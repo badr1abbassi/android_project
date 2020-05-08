@@ -118,7 +118,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             //time.setText(currentAlarm.getDate()+" "+currentAlarm.getTime());
             String currentDate =(String) android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss ", currentAlarm.getCalendar());
             time.setText(currentDate);
-            img.setImageURI(currentAlarm.getImage());
+             img.setImageURI(currentAlarm.getImage());
             //img.setImageResource(R.drawable.alarm);
             img.setContentDescription("alarm");
 

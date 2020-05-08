@@ -1,5 +1,6 @@
  package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,9 +36,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -209,8 +214,11 @@ import java.util.Calendar;
             Alarm.listeAlarmes.add(alarmInfo);
             alarmInfo.setId(++ALARMEID);
             startAlarm(alarmInfo);
-            Intent intent = new Intent(this, Alarm.class);
-            this.startActivity(intent);
+            Intent intent = new Intent(AddAlarm.this, Alarm.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+
         }
         }
 
@@ -249,5 +257,24 @@ import java.util.Calendar;
          PendingIntent pendingIntent=PendingIntent.getBroadcast(this,1,intent,0);
         alarmManager.cancel(pendingIntent);
          Toast.makeText(this, "Alarme OFF", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
+     }
+
+     public void saveAlarm(AlarmInfo alarmInfo){
+         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("alarm"+alarmInfo.getId())
+                 .setValue(alarmInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+             @Override
+             public void onComplete(@NonNull Task<Void> task) {
+                 if(task.isSuccessful()) {
+                     Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+                     Intent intent = new Intent(AddAlarm.this, Alarm.class);
+                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                     startActivity(intent);
+
+                 }
+                 else {
+                     Toast.makeText(getApplicationContext(),"Probleme", Toast.LENGTH_SHORT).show();
+                 }
+             }
+         });
      }
  }

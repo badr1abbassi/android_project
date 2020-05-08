@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -45,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         localisation=findViewById(R.id.buttonLocalisation);
         sante=findViewById(R.id.buttonHealth);
         camera=findViewById(R.id.buttonCamera);
@@ -229,6 +229,10 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             finish();
         }
+        else if (id == R.id.profil) {
+            startActivity(new Intent(this, ProfilActivity.class));
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

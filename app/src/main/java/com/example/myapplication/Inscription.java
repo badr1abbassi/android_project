@@ -18,11 +18,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.regex.Pattern;
 
 public class Inscription extends AppCompatActivity implements View.OnClickListener {
-    EditText editTextemail , editTextmdp, editTextConfmdp;
+    EditText editTextemail , editTextmdp, editTextConfmdp,editTextId,editTextTel;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
     @Override
@@ -30,29 +31,56 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
         editTextmdp = findViewById(R.id.mdp);
+        editTextId = findViewById(R.id.id);
         editTextemail = findViewById(R.id.email);
         editTextConfmdp = findViewById(R.id.mdp2);
+        editTextTel= findViewById(R.id.tel);
         progressBar = findViewById(R.id.progressBar);
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.btnInscrire).setOnClickListener(this);
         findViewById(R.id.textViewAuth).setOnClickListener(this);
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser()!=null){
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 
     private void registerUser(){
-        String email = editTextemail.getText().toString().trim();
-        String mdp = editTextmdp.getText().toString().trim();
+        final String email = editTextemail.getText().toString().trim();
+        final String mdp = editTextmdp.getText().toString().trim();
         String confmdp = editTextConfmdp.getText().toString().trim();
+        final String id = editTextId.getText().toString().trim();
+        final String tel = editTextTel.getText().toString().trim();
 
         if(email.isEmpty()){
             editTextemail.setError("Vous devez entrer votre email");
             editTextemail.requestFocus();
             return;
         }
+        if(email.isEmpty()){
+            editTextTel.setError("Vous devez entrer votre numéro de téléphone");
+            editTextTel.requestFocus();
+            return;
+        }
+
+        if(id.isEmpty()){
+            editTextId.setError("Vous devez entrer votre identifiant");
+            editTextId.requestFocus();
+            return;
+        }
+
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextemail.setError("Vous devez entrer un email valide");
             editTextemail.requestFocus();
             return;
         }
+
         if(mdp.isEmpty() || mdp.length()<6){
             editTextmdp.setError("Vous devez entrer au moin 6 caractères");
             editTextmdp.requestFocus();
@@ -71,10 +99,23 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Inscription.this, Authentification.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+                            User user = new User(email,tel,id);
+                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Inscription.this, Authentification.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        finish();
+                                        startActivity(intent);
+
+                                    }
+                                }
+                            });
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             if(task.getException() instanceof FirebaseAuthUserCollisionException) {
@@ -98,6 +139,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
                 registerUser();
                 break;
             case R.id.textViewAuth:
+                finish();
                 startActivity(new Intent(this,Authentification.class));
                 break;
         }
