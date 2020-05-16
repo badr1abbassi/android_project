@@ -38,23 +38,32 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_authentification);
         findViewById(R.id.textViewAuth).setOnClickListener(this);
         findViewById(R.id.btnAuth).setOnClickListener(this);
-        findViewById(R.id.progressBar);
+        progressBar= findViewById(R.id.progressBar);
         editTextmdp = findViewById(R.id.mdp);
         editTextemail = findViewById(R.id.email);
         mAuth=FirebaseAuth.getInstance();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser() != null) {
+            finish();
+            startActivity(new Intent(this,MainActivity.class));
+        }
     }
 
     private void authentification() {
         final String email = editTextemail.getText().toString().trim();
         final String mdp = editTextmdp.getText().toString().trim();
+        progressBar.setVisibility(View.VISIBLE);
         if(email.isEmpty()){
             editTextemail.setError("Vous devez entrer votre email");
             editTextemail.requestFocus();
             return;
         }
         if(mdp.isEmpty()){
-            editTextmdp.setError("Vous devez entrerle mot de passe");
+            editTextmdp.setError("Vous devez entrer le mot de passe");
             editTextmdp.requestFocus();
             return;
         }
@@ -63,51 +72,8 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-
-                   /*
-                    DatabaseReference mFirebaseRef = FirebaseDatabase.getInstance().getReference();
-
-
-                    Users user = new Users(email, mdp, "06666666");
-                    mFirebaseRef.child("ayoub").child("alarme").child("alarme1").setValue(user);
-
-
-                    Query mQueryRef = mFirebaseRef.child("ayoub").orderByChild("email").equalTo("ayoub@gmail.com");
-
-                    // This type of listener is not one time, and you need to cancel it to stop
-                    // receiving updates.
-                    mQueryRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                            // This will fire for each matching child node.
-                            Users user = snapshot.getValue(Users.class);
-                            System.out.println("mmmmmmm");
-                        }
-
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-
-
-                    });
-                    */
-                    getData();
+                    progressBar.setVisibility(View.GONE);
+                    finish();
                     Intent intent = new Intent(Authentification.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -119,30 +85,14 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void getData(){
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                User user = dataSnapshot.getValue(User.class);
-                System.out.println("mmmmmmmmmmmmm"+user.getName());
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("erreur", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(postListener);
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.textViewAuth:
-                startActivity(new Intent(this,Inscription.class));
+                finish();
+                startActivity(new Intent(Authentification.this,Inscription.class));
                 break;
             case R.id.btnAuth:
                 authentification();

@@ -41,13 +41,12 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
         findViewById(R.id.textViewAuth).setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
     }
-
     @Override
     protected void onStart() {
         super.onStart();
-        if(mAuth.getCurrentUser()!=null){
+        if(mAuth.getCurrentUser() != null) {
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this,MainActivity.class));
         }
     }
 

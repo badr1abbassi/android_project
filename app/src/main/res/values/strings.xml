@@ -17,4 +17,5 @@
     <string name="share_note">Share Note</string>
     <string name="delete_notes">Delete Notes</string>
     <string name="no_notes">No Notes !</string>
+    <string name="logo">logo</string>
 </resources>

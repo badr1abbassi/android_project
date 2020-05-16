@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.dec) {
             FirebaseAuth.getInstance().signOut();
             finish();
+            startActivity(new Intent(this,Authentification.class));
         }
         else if (id == R.id.profil) {
             startActivity(new Intent(this, ProfilActivity.class));

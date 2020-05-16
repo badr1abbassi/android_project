@@ -62,9 +62,6 @@ public class TacheActivity extends AppCompatActivity implements NoteEventListene
         setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tache2);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         //setupNavigation(savedInstanceState, toolbar);
         // init recyclerView
         recyclerView = findViewById(R.id.notes_list);

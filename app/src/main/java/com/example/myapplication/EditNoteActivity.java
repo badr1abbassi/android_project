@@ -30,8 +30,6 @@ public class EditNoteActivity extends AppCompatActivity {
         setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
-        Toolbar toolbar = findViewById(R.id.edit_note_activity_toolbar);
-        setSupportActionBar(toolbar);
 
         inputNote = findViewById(R.id.input_note);
         dao = NotesDB.getInstance(this).notesDao();
