@@ -102,9 +102,6 @@ public class Scanner extends AppCompatActivity {
         if ( id == R.id.addImage){
             showImageImportDialog();
         }
-        if (id == R.id.settings) {
-            Toast.makeText(this, "Settings",Toast.LENGTH_SHORT).show();
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -9,6 +9,8 @@
     <color name="colorPrimaryDarkTache">#F57C00</color>
     <color name="colorAccentTache">#ffa008</color>
     <color name="view_backg_colorTache">#c7c7C7</color>
+    <color name="background">#DEF4EB</color>
+    <color name="logo">#51C3A2</color>
 
     <!--  colors for dark theme -->
     <color name="colorPrimary_dark">#212121</color>

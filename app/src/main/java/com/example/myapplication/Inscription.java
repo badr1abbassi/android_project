@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -23,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.regex.Pattern;
 
 public class Inscription extends AppCompatActivity implements View.OnClickListener {
-    EditText editTextemail , editTextmdp, editTextConfmdp,editTextId,editTextTel;
+    TextInputLayout editTextemail , editTextmdp, editTextConfmdp,editTextName,editTextTel;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
     @Override
@@ -31,7 +32,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
         editTextmdp = findViewById(R.id.mdp);
-        editTextId = findViewById(R.id.id);
+        editTextName = findViewById(R.id.name);
         editTextemail = findViewById(R.id.email);
         editTextConfmdp = findViewById(R.id.mdp2);
         editTextTel= findViewById(R.id.tel);
@@ -51,42 +52,43 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
     }
 
     private void registerUser(){
-        final String email = editTextemail.getText().toString().trim();
-        final String mdp = editTextmdp.getText().toString().trim();
-        String confmdp = editTextConfmdp.getText().toString().trim();
-        final String id = editTextId.getText().toString().trim();
-        final String tel = editTextTel.getText().toString().trim();
+        final String email = editTextemail.getEditText().getText().toString().trim();
+        final String mdp = editTextmdp.getEditText().getText().toString().trim();
+        String confmdp = editTextConfmdp.getEditText().getText().toString().trim();
+        final String id = editTextName.getEditText().getText().toString().trim();
+        final String tel = editTextTel.getEditText().getText().toString().trim();
 
-        if(email.isEmpty()){
-            editTextemail.setError("Vous devez entrer votre email");
-            editTextemail.requestFocus();
+        if(id.isEmpty()){
+            editTextName.getEditText().setError("Vous devez entrer votre identifiant");
+            editTextName.requestFocus();
             return;
         }
         if(email.isEmpty()){
+            editTextemail.getEditText().setText("");
+            editTextemail.getEditText().setError("Vous devez entrer votre email");
+            editTextemail.requestFocus();
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextemail.getEditText().setText("");
+            editTextemail.getEditText().setError("Vous devez entrer un email valide");
+            editTextemail.requestFocus();
+            return;
+        }
+        if(tel.isEmpty()){
             editTextTel.setError("Vous devez entrer votre numéro de téléphone");
             editTextTel.requestFocus();
             return;
         }
-
-        if(id.isEmpty()){
-            editTextId.setError("Vous devez entrer votre identifiant");
-            editTextId.requestFocus();
-            return;
-        }
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextemail.setError("Vous devez entrer un email valide");
-            editTextemail.requestFocus();
-            return;
-        }
-
         if(mdp.isEmpty() || mdp.length()<6){
-            editTextmdp.setError("Vous devez entrer au moin 6 caractères");
+            editTextmdp.getEditText().setText("");
+            editTextmdp.getEditText().setError("Vous devez entrer au moin 6 caractères");
             editTextmdp.requestFocus();
             return;
         }
         if(!mdp.equals(confmdp)){
-            editTextConfmdp.setError("Les mots de passes ne sont pas identiques");
+            editTextConfmdp.getEditText().setText("");
+            editTextConfmdp.getEditText().setError("Les mots de passes ne sont pas identiques");
             editTextConfmdp.requestFocus();
             return;
         }
