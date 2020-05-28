@@ -134,7 +134,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="32dp">
+                    android:layout_marginTop="32dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btnSave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/sauvegarder"
+                        tools:ignore="InvalidId"
+                        android:layout_marginRight="16dp" />
+                    <Button
+                        android:id="@+id/btnBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Annuler"
+                        tools:ignore="InvalidId" />
 
                 </LinearLayout>
             </LinearLayout>
