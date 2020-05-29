@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.util.List;
 import java.util.Vector;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
-    private Vector<AlarmInfo> alarmInfos;
+    private List<AlarmInfo> alarmInfos;
 
-    public MyAdapter(Vector<AlarmInfo> alarmInfos) {
+    public MyAdapter(List<AlarmInfo> alarmInfos) {
         this.alarmInfos=alarmInfos;
     }
 
@@ -107,11 +108,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     });
                     AlertDialog alert = builder.create();
                     alert.show();
-
                 }
             });
         }
-
         public void display(AlarmInfo alarm) {
             currentAlarm = alarm;
             message.setText(currentAlarm.getMessage());
@@ -121,7 +120,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
              img.setImageURI(currentAlarm.getImage());
             //img.setImageResource(R.drawable.alarm);
             img.setContentDescription("alarm");
-
         }
     }
 

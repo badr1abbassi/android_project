@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
 import java.util.Vector;
 
 public class alarmFragment extends Fragment {
@@ -38,7 +39,7 @@ public class alarmFragment extends Fragment {
         return view;
     }
 
-    public void showText() {
-        rv.setAdapter(new MyAdapter(Alarm.listeAlarmes));
+    public void showAlarmes(List<AlarmInfo> listeAlarmes) {
+        rv.setAdapter(new MyAdapter(listeAlarmes));
     }
 }

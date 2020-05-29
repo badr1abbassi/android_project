@@ -21,13 +21,14 @@ public class AlarmInfo implements Serializable {
 
     public AlarmInfo(){}
 
-    public AlarmInfo(int id, Calendar calendar, boolean repeat, String message, String status, Uri image) {
+    public AlarmInfo(int id, Calendar calendar, boolean repeat, String message, String status, Uri image,String imageUrl) {
         this.id = id;
         this.calendar = calendar;
         this.repeat = repeat;
         this.message = message;
         this.status = status;
         this.image = image;
+        this.imageUrl=imageUrl;
     }
 
     public String getImageUrl() {

@@ -233,7 +233,6 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
             uploadImage(alarmInfo.getId());
             Alarm.listeAlarmes.add(alarmInfo);
             alarmInfo.setId(++ALARMEID);
-            saveAlarm(alarmInfo);
             //startAlarm(alarmInfo);
             startAlarm(alarmInfo);
             Intent intent = new Intent(AddAlarm.this, Alarm.class);
@@ -273,6 +272,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
                         public void onSuccess(Uri uri) {
                             alarmInfo.setImageUrl(uri.toString());
                             Log.e("TAG:", "the url is: " + uri.toString());
+                            saveAlarm(alarmInfo);
                             Toast.makeText(AddAlarm.this,"image ajoutée",Toast.LENGTH_SHORT).show();
 
                         }
@@ -346,7 +346,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     }
 
     public void saveAlarm(AlarmInfo alarmInfo){
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("alarm"+alarmInfo.getId())
+        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("alarmes").child("alarm"+alarmInfo.getId())
                 .setValue(alarmInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
