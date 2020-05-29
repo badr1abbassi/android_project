@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.net.Uri;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Calendar;
@@ -14,6 +16,8 @@ public class AlarmInfo implements Serializable {
     private String message;
     private String status;
     private Uri image;
+    private String imageUrl;
+
 
     public AlarmInfo(){}
 
@@ -26,6 +30,14 @@ public class AlarmInfo implements Serializable {
         this.image = image;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    @Exclude
     public Uri getImage() {
         return image;
     }
@@ -41,7 +53,7 @@ public class AlarmInfo implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
+    @Exclude
     public Calendar getCalendar() {
         return calendar;
     }
