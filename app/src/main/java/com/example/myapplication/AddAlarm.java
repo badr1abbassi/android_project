@@ -258,9 +258,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
         return extension;
     }
     private void uploadImage(int id) {
-
         if(resultUri !=null){
-
             String path="medicament"+id+"."+getImageExtension(resultUri);
             Log.d("hhhhhhh path",path);
             StorageReference imageRef=mStorageReference.child(path);
