@@ -5,29 +5,26 @@ import android.net.Uri;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Calendar;
 
 public class AlarmInfo implements Serializable {
 
     private int id;
-    private Calendar calendar;
+    private Date date;
     private boolean repeat;
     private String message;
     private String status;
-    private Uri image;
     private String imageUrl;
 
 
     public AlarmInfo(){}
 
-    public AlarmInfo(int id, Calendar calendar, boolean repeat, String message, String status, Uri image,String imageUrl) {
+    public AlarmInfo(int id, Date date, boolean repeat, String message, String status,String imageUrl) {
         this.id = id;
-        this.calendar = calendar;
+        this.date = date;
         this.repeat = repeat;
         this.message = message;
         this.status = status;
-        this.image = image;
         this.imageUrl=imageUrl;
     }
 
@@ -38,14 +35,6 @@ public class AlarmInfo implements Serializable {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    @Exclude
-    public Uri getImage() {
-        return image;
-    }
-
-    public void setImage(Uri image) {
-        this.image = image;
-    }
 
     public int getId() {
         return id;
@@ -55,12 +44,12 @@ public class AlarmInfo implements Serializable {
         this.id = id;
     }
 
-    public Calendar getCalendar() {
-        return calendar;
+    public Date getDate() {
+        return date;
     }
 
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getStatus() {
@@ -85,6 +74,18 @@ public class AlarmInfo implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Exclude
+    public Calendar getCalendar() {
+        Calendar dateCal=Calendar.getInstance();
+        dateCal.set(Calendar.YEAR,this.date.getYear());
+        dateCal.set(Calendar.MONTH,this.date.getMonth());
+        dateCal.set(Calendar.DAY_OF_MONTH,this.date.getDayOfMonth());
+        dateCal.set(Calendar.HOUR,this.date.getHour());
+        dateCal.set(Calendar.MINUTE,this.date.getMinute());
+        dateCal.set(Calendar.SECOND,0);
+        return  dateCal;
     }
 
 

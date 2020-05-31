@@ -1,7 +1,10 @@
 package com.example.myapplication;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -17,11 +20,14 @@ import java.util.Vector;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
     private List<AlarmInfo> alarmInfos;
+
 
     public MyAdapter(List<AlarmInfo> alarmInfos) {
         this.alarmInfos=alarmInfos;
@@ -53,8 +59,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         //  System.out.println("position =" + position);
         holder.display(Etab);
-
-
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -62,7 +66,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         private final TextView message;
         private final TextView time;
         private final ImageView img;
-
+        private Context mContext;
         //  private Pair<String, String> currentPair;
         private AlarmInfo currentAlarm;
 
@@ -73,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             message = itemView.findViewById(R.id.message);
             time = itemView.findViewById(R.id.time);
             img=  itemView.findViewById(R.id.img);
-
+            mContext=itemView.getContext();
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -111,14 +115,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 }
             });
         }
+
         public void display(AlarmInfo alarm) {
             currentAlarm = alarm;
             message.setText(currentAlarm.getMessage());
-            //time.setText(currentAlarm.getDate()+" "+currentAlarm.getTime());
-            String currentDate =(String) android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss ", currentAlarm.getCalendar());
-            time.setText(currentDate);
-             img.setImageURI(currentAlarm.getImage());
-            //img.setImageResource(R.drawable.alarm);
+            //String currentDate =(String) android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss ", currentAlarm.getCalendar());
+            //time.setText(currentDate);
+            time.setText(currentAlarm.getCalendar().getTime()+"");
+             //img.setImageURI(currentAlarm.getImage());
+            //img.setImageURI(null);
+            Picasso.get().load(currentAlarm.getImageUrl()).centerCrop().fit().into(img);
             img.setContentDescription("alarm");
         }
     }

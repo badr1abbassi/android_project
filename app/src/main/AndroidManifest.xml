@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -32,6 +34,9 @@
             android:name=".ChangePassword"
             android:label="Changer le mot de passe"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".LocalisationManager"></activity>
+        <activity android:name=".Medicament" />
+
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
@@ -106,7 +111,9 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme" />
 
+
         <receiver android:name=".AlertReceiver" />
+        <service android:name=".LocalisationService"/>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -19,15 +20,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -44,9 +43,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -64,18 +60,25 @@ import java.util.Calendar;
 
 public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-
+    public static  final int ALARME_CODE = 250;
     private TimePicker alarmTimePicker;
     private EditText alarmTextView;
     TextView date;
     Calendar c;
+    //date + time
+    private int minute=0;
+    private int hour=0;
+    private int dayOfMonth=0;
+    private int month=0;
+    private int year=0;
+
 
     AlarmInfo alarmInfo;
     private String alarmeDate,alarmeTime;
     private boolean repeat;
     private String message;
     private String status;
-    public static int ALARMEID=0;
+    private DialogFragment datePicker;
     String cameraPermission[];
     String storagePermission[];
     Uri image_uri;
@@ -96,26 +99,28 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
                 showImageImportDialog();
             }
         });
-
+        c=Calendar.getInstance();
         alarmTimePicker = (TimePicker) findViewById(R.id.alarmTimePicker);
         alarmTextView=findViewById(R.id.alarmText);
         date=findViewById(R.id.dateMessage);
         Button date=findViewById(R.id.date);
+        requestAlarmePermissions();
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment datePicker=new DatePickerFragment();
+                datePicker=new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
             }
         });
         final Button enregistrer=findViewById(R.id.EnregistrerAlarme);
         enregistrer.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 setAlarm(v);
             }
         });
-        mStorageReference=FirebaseStorage.getInstance().getReference("medicaments");
+        mStorageReference=FirebaseStorage.getInstance().getReference("medicaments").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
     private void showImageImportDialog() {
         String[] items = {" Camera", " Gallery"};
@@ -163,7 +168,16 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     private void requestStoragePermissions(){
         ActivityCompat.requestPermissions(this,storagePermission, Scanner.STORAGE_REQUEST_CODE);
     }
-
+    private void requestAlarmePermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SET_ALARM) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("Perm check:SET_ALARM", "Permission Denied");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.SET_ALARM}, 222);
+            }
+        } else {
+            Log.d("Perm check:SET_ALARM", "Permission Exists");
+        }
+    }
     private void pickCamera() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE,"NewPic");
@@ -191,17 +205,18 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
                 CropImage.activity(image_uri)
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
+            if(requestCode ==ALARME_CODE){
+                Toast.makeText(getApplicationContext(),"votre medicament est enregistrée", Toast.LENGTH_SHORT).show();
+            }
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 resultUri = result.getUri();
-
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),resultUri);
                     image.setImageBitmap(bitmap);
                 } catch (IOException e) {
-                    Log.d("message:","hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh bitmap");
                     e.printStackTrace();
                 }
                 //image.setImageURI(resultUri);
@@ -216,31 +231,25 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
 
     public void setAlarm(View v){
         message=alarmTextView.getText().toString();
-        alarmeTime= alarmTimePicker.getCurrentHour() + ":" + alarmTimePicker.getCurrentMinute();
         alarmInfo=new AlarmInfo();
         alarmInfo.setRepeat(repeat);
         alarmInfo.setMessage(message);
-
         alarmInfo.setStatus("on");
-        c=Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY,alarmTimePicker.getCurrentHour());
-        c.set(Calendar.MINUTE,alarmTimePicker.getCurrentMinute());
-        c.set(Calendar.SECOND,0);
-        alarmInfo.setCalendar(c);
-        alarmInfo.setImage(resultUri);
+
+        this.hour=alarmTimePicker.getCurrentHour();
+        this.minute=alarmTimePicker.getCurrentMinute();
+
+        alarmInfo.setDate(new Date(minute,hour,dayOfMonth,month,year));
+
         if(TextUtils.isEmpty(alarmTextView.getText())){
             alarmTextView.setError( "medicament obligatoire !" );
         }else {
+            alarmInfo.setId(Alarm.listeAlarmes.size()+1);
             uploadImage(alarmInfo.getId());
-            Alarm.listeAlarmes.add(alarmInfo);
-            alarmInfo.setId(++ALARMEID);
-            //startAlarm(alarmInfo);
-            startAlarm(alarmInfo);
             Intent intent = new Intent(AddAlarm.this, Alarm.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
-
         }
     }
     private String getImageExtension(Uri uri){
@@ -259,8 +268,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     }
     private void uploadImage(int id) {
         if(resultUri !=null){
-            String path="medicament"+id+"."+getImageExtension(resultUri);
-            Log.d("hhhhhhh path",path);
+            String path=id+"."+getImageExtension(resultUri);
             StorageReference imageRef=mStorageReference.child(path);
 
             imageRef.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -274,6 +282,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
                             alarmInfo.setImageUrl(uri.toString());
                             Log.e("TAG:", "the url is: " + uri.toString());
                             saveAlarm(alarmInfo);
+                            startAlarm(alarmInfo);
                             Toast.makeText(AddAlarm.this,"image ajoutée",Toast.LENGTH_SHORT).show();
 
                         }
@@ -308,7 +317,6 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
         }
     }
 
-
     public void onToggleClicked(View view) {
         if (((ToggleButton) view).isChecked()) {
             repeat=true;
@@ -319,24 +327,24 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     }
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        c=Calendar.getInstance();
-        c.set(Calendar.YEAR,year);
-        c.set(Calendar.MONTH,month);
-        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-        String currentDate= DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime());
-        date.setText(currentDate);
-        alarmeDate=currentDate;
+        this.year=year;
+        this.month=month;
+        this.dayOfMonth=dayOfMonth;
+        date.setText(dayOfMonth+"/"+month+"/"+year);
     }
+
     public void startAlarm(AlarmInfo alarmInfo){
         AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent =new Intent(this,AlertReceiver.class);
         intent.putExtra("title",alarmInfo.getMessage());
-        //intent.putExtra("uriImage",alarmInfo.getImage().toString());
+        intent.putExtra("uriImage",alarmInfo.getImageUrl());
         PendingIntent pendingIntent=PendingIntent.getBroadcast(this,alarmInfo.getId(),intent,0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,alarmInfo.getCalendar().getTimeInMillis(),pendingIntent);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,10000,pendingIntent);
+            Toast.makeText(this, "Alarme"+alarmInfo.getId()+"ON", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
+
         }
-        Toast.makeText(this, "Alarme ON", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
     }
     public void cancelAlarm(){
         AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
