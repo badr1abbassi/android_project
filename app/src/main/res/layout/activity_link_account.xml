@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ChangePassword">
+    tools:context=".LinkAccount">
 
 
     <ScrollView
@@ -24,52 +24,35 @@
                 android:id="@+id/include"
                 layout="@layout/header" />
 
-
+            <TextView
+                android:id="@+id/tvLinked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/addAcount"
+                android:textAlignment="center"
+                android:gravity="center_horizontal"
+                android:padding="32dp"/>
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/Emdp"
+                android:id="@+id/userId"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
                 app:errorEnabled="true"
-                app:passwordToggleEnabled="true"
-                app:startIconDrawable="@drawable/ic_lock"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_profile"
                 app:startIconTint="@color/logo">
 
-
                 <com.google.android.material.textfield.TextInputEditText
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ancien mot de passe"
-                    android:inputType="textPassword" />
+                    android:hint="@string/l_identifient"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ENewmdp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:ems="10"
-                app:errorEnabled="true"
-                app:passwordToggleEnabled="true"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/logo">
-
-
-                <com.google.android.material.textfield.TextInputEditText
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nouveau mot de passe"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/buttons"
@@ -77,15 +60,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_gravity="center"
-               >
+                >
                 <Button
-                    android:id="@+id/btnSave"
+                    android:id="@+id/btnAdd"
+                    style="?android:attr/buttonBarStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/sauvegarder"
+                    android:text="@string/ajouter"
                     tools:ignore="InvalidId"
-                    android:layout_marginRight="16dp" />
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp" />
+                <Button
+                    android:id="@+id/btnBack"
+                    style="?android:attr/buttonBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Annuler"
+                    tools:ignore="InvalidId"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

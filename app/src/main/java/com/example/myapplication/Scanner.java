@@ -34,13 +34,14 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Locale;
 
 public class Scanner extends AppCompatActivity {
-    EditText mResultET;
+    TextInputLayout mResultET;
     ImageView mPreviewIv;
     Button btConvert;
     TextToSpeech textToSpeech;
@@ -59,10 +60,10 @@ public class Scanner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
-        /*
-        actionBar = getSupportActionBar();
+
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setSubtitle("Cliquez sur l'icon d'image");
-         */
+         
         mResultET = findViewById(R.id.resultEt);
         mPreviewIv = findViewById(R.id.imageIv);
         btConvert = findViewById(R.id.bt_convert);
@@ -84,7 +85,7 @@ public class Scanner extends AppCompatActivity {
         btConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = mResultET.getText().toString();
+                String s = mResultET.getEditText().getText().toString();
                 int speech = textToSpeech.speak(s,TextToSpeech.QUEUE_FLUSH,null);
             }
         });
@@ -239,7 +240,7 @@ public class Scanner extends AppCompatActivity {
                         sb.append(myItem.getValue());
                         sb.append("\n");
                     }
-                    mResultET.setText(sb.toString());
+                    mResultET.getEditText().setText(sb.toString());
                 }
             }
             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){

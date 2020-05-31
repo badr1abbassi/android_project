@@ -135,7 +135,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="32dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
                     <Button
                         android:id="@+id/btnSave"
                         android:layout_width="wrap_content"

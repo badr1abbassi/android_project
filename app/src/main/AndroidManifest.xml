@@ -24,7 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChangePassword"></activity>
+        <activity
+            android:name=".LinkAccount"
+            android:label="Lier votre compte"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".ChangePassword"
+            android:label="Changer le mot de passe"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
@@ -34,20 +41,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProfilActivity"></activity>
+        <activity
+            android:name=".ProfilActivity"
+            android:label="Profil"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Inscription"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge" />
         <activity
             android:name=".Authentification"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        </activity>
-
-        <activity android:name=".AddAlarm" />
-        <activity android:name=".EditNoteActivity" />
-        <activity android:name=".TacheActivity" />
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge" />
+        <activity
+            android:name=".AddAlarm"
+            android:label="Ajouter une alarme"
+            android:parentActivityName=".Alarm" />
+        <activity
+            android:name=".EditNoteActivity"
+            android:label="Ajouter une note"
+            android:parentActivityName=".TacheActivity" />
+        <activity
+            android:name=".TacheActivity"
+            android:label="Votre liste des notes"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".alarmFragment" />
-        <activity android:name=".Alarm" />
+        <activity
+            android:name=".Alarm"
+            android:label="Alarm"
+            android:parentActivityName=".MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -59,7 +79,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -74,17 +93,18 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Scanner"
-            android:label="@string/title_activity_scanner" />
+            android:label="@string/title_activity_scanner"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme" />
-
 
         <receiver android:name=".AlertReceiver" />
     </application>

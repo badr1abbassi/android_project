@@ -10,6 +10,10 @@
                 android:icon="@drawable/profile"
                 android:title="Profil" />
                 <item
+                    android:id="@+id/link"
+                    android:icon="@drawable/ic_link"
+                    android:title="Lier votre compte" />
+                <item
                     android:id="@+id/password"
                     android:icon="@drawable/ic_create"
                     android:title="Changer le mot de passe" />
@@ -26,7 +30,7 @@
             <item
                 android:id="@+id/share"
                 android:icon="@drawable/ic_share"
-                android:title="Partager" />
+                android:title="Partager votre ID" />
         </menu>
     </item>
 </menu>

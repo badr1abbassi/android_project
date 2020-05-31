@@ -10,56 +10,73 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        >
+        android:layout_marginBottom="20dp">
+
         <Button
             android:id="@+id/annulerAlarme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_weight="1"
-            android:text="Annuler"
-            />
+            android:text="Annuler" />
+
         <Button
             android:id="@+id/EnregistrerAlarme"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enregistrer"
-            />
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:text="Enregistrer" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        >
-        <Button
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="Date"/>
-        <TextView
-            android:id="@+id/dateMessage"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:text="Chaque jour"
-            />
+        android:layout_marginBottom="20dp">
 
-        <TextView
-            android:id="@+id/rep"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="Date" />
+
+            <TextView
+                android:id="@+id/dateMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Chaque jour" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="repeat :"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:fontFamily="sans-serif-smallcaps" />
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alarm On/Off"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
-            android:id="@+id/alarmToggle"
-            android:onClick="onToggleClicked" />
+            android:layout_gravity="right"
+            android:layout_marginLeft="32dp">
+
+            <TextView
+                android:id="@+id/rep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="repeat :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:fontFamily="sans-serif-smallcaps" />
+
+            <ToggleButton
+                android:id="@+id/alarmToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:onClick="onToggleClicked"
+                android:text="Alarm On/Off" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -70,7 +87,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/alarmText"
@@ -83,15 +100,23 @@
                 android:gravity="center"
                 android:hint="Entrer votre message" />
 
-            <ImageView
+
+            <ImageButton
                 android:id="@+id/imageIv2"
-                android:layout_width="match_parent"
-                android:layout_height="279dp"
-                android:clickable="true"
-                android:layout_marginBottom="10px"
-                android:contentDescription="@null"
-                android:maxHeight="250dp"
-                app:srcCompat="@drawable/pharmacie" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/background"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                app:srcCompat="@drawable/ic_image"
+                tools:ignore="VectorDrawableCompat" />
 
             <TimePicker
                 android:id="@+id/alarmTimePicker"

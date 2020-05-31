@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="5"
     tools:context=".Scanner">
@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="UselessParent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,24 +32,40 @@
                     android:orientation="vertical"
                     android:padding="5dp">
 
-                    <Button
-                        android:id="@+id/bt_convert"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_horizontal"
-                        android:text="@string/convert"
-                        android:textAlignment="center" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
 
-                    <EditText
+                        <Button
+                            android:id="@+id/bt_convert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingLeft="32dp"
+                            android:paddingTop="8dp"
+                            android:paddingRight="32dp"
+                            android:paddingBottom="4dp"
+                            android:text="@string/convert"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/resultEt"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoLink="all"
-                        android:hint="@string/r_sultat"
-                        android:importantForAutofill="no"
-                        android:inputType="textMultiLine"
-                        android:padding="5sp"
-                        android:textSize="30sp" />
+                        android:layout_height="match_parent"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Le texte d'image"
+                            android:inputType="textMultiLine"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
                 </LinearLayout>
@@ -72,8 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/image_preview"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="20sp" />
+                        android:textColor="@color/colorPrimary" />
 
                     <ImageView
                         android:id="@+id/imageIv"

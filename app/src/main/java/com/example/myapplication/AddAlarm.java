@@ -33,6 +33,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -78,7 +79,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     String cameraPermission[];
     String storagePermission[];
     Uri image_uri;
-    ImageView image;
+    ImageButton image;
     Uri resultUri;
     private StorageReference mStorageReference;
     private DatabaseReference mDatabaseReference;

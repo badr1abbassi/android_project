@@ -42,11 +42,13 @@ public class ProfilActivity extends AppCompatActivity {
     LinearLayout buttons;
     ImageButton modifier;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil);
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
@@ -66,7 +68,9 @@ public class ProfilActivity extends AppCompatActivity {
         buttons = findViewById(R.id.buttons);
         Eoldmdp = findViewById(R.id.Emdp);
 
-        loadUser();
+        Ename.getEditText().setText(MainActivity.Cuser.getName());
+        Eemail.getEditText().setText(MainActivity.Cuser.getEmail());
+        Ephone.getEditText().setText(MainActivity.Cuser.getPhone());
 
         Ename.getEditText().setInputType(InputType.TYPE_NULL);
         Eemail.getEditText().setInputType(InputType.TYPE_NULL);
@@ -85,7 +89,9 @@ public class ProfilActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 buttons.setVisibility(View.GONE);
-                loadUser();
+                Ename.getEditText().setText(MainActivity.Cuser.getName());
+                Eemail.getEditText().setText(MainActivity.Cuser.getEmail());
+                Ephone.getEditText().setText(MainActivity.Cuser.getPhone());
                 Ename.getEditText().setInputType(InputType.TYPE_NULL);
                 Eemail.getEditText().setInputType(InputType.TYPE_NULL);
                 Ephone.getEditText().setInputType(InputType.TYPE_NULL);
@@ -99,27 +105,6 @@ public class ProfilActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void loadUser() {
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                User user = dataSnapshot.getValue(User.class);
-                Ename.getEditText().setText(user.getName());
-                Eemail.getEditText().setText(user.getEmail());
-                Ephone.getEditText().setText(user.getPhone());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("erreur", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(userListener);
     }
 
     public void addUserData() {
@@ -152,6 +137,11 @@ public class ProfilActivity extends AppCompatActivity {
             Eemail.requestFocus();
             return;
         }
+        if(oldmdp.isEmpty()){
+            Eoldmdp.setError("Vous devez entrer votre mot de passe");
+            Eoldmdp.requestFocus();
+            return;
+        }
 
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -171,9 +161,9 @@ public class ProfilActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Log.d("succes", "email updated.");
-                                                User cUser = new User(email, phone, name);
+                                                User user = new User(email, phone, name);
                                                 FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                        .setValue(cUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
@@ -188,7 +178,9 @@ public class ProfilActivity extends AppCompatActivity {
                                         }
                                     });
                         } else {
-                            Log.d("echec", "Error auth failed");
+                            Eoldmdp.setError("Le mot de passe est incorrecte");
+                            Eoldmdp.requestFocus();
+                            return;
                         }
 
                     }

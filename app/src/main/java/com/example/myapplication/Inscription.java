@@ -59,19 +59,17 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
         final String tel = editTextTel.getEditText().getText().toString().trim();
 
         if(id.isEmpty()){
-            editTextName.getEditText().setError("Vous devez entrer votre identifiant");
+            editTextName.setError("Vous devez entrer votre identifiant");
             editTextName.requestFocus();
             return;
         }
         if(email.isEmpty()){
-            editTextemail.getEditText().setText("");
-            editTextemail.getEditText().setError("Vous devez entrer votre email");
+            editTextemail.setError("Vous devez entrer votre email");
             editTextemail.requestFocus();
             return;
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextemail.getEditText().setText("");
-            editTextemail.getEditText().setError("Vous devez entrer un email valide");
+            editTextemail.setError("Vous devez entrer un email valide");
             editTextemail.requestFocus();
             return;
         }
@@ -81,14 +79,12 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
             return;
         }
         if(mdp.isEmpty() || mdp.length()<6){
-            editTextmdp.getEditText().setText("");
-            editTextmdp.getEditText().setError("Vous devez entrer au moin 6 caractères");
+            editTextmdp.setError("Vous devez entrer au moin 6 caractères");
             editTextmdp.requestFocus();
             return;
         }
         if(!mdp.equals(confmdp)){
-            editTextConfmdp.getEditText().setText("");
-            editTextConfmdp.getEditText().setError("Les mots de passes ne sont pas identiques");
+            editTextConfmdp.setError("Les mots de passes ne sont pas identiques");
             editTextConfmdp.requestFocus();
             return;
         }

@@ -44,14 +44,6 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
         mAuth=FirebaseAuth.getInstance();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(mAuth.getCurrentUser() != null) {
-            finish();
-            startActivity(new Intent(this,MainActivity.class));
-        }
-    }
 
     private void authentification() {
         final String email = editTextemail.getText().toString().trim();
@@ -70,9 +62,8 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
         mAuth.signInWithEmailAndPassword(email,mdp).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
+                progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
                     finish();
                     Intent intent = new Intent(Authentification.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

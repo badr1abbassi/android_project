@@ -21,4 +21,7 @@
     <string name="nav_drawer_open">Ouvrir la bar de navigation</string>
     <string name="nav_drawer_close">Fermer la bar de navigation</string>
     <string name="sauvegarder">Sauvegarder</string>
+    <string name="addAcount">Pour lier votre compte avec un autre compte vous devez entrer son identifiant au-dessous</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="l_identifient">L\'identifient</string>
 </resources>

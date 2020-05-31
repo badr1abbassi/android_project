@@ -54,7 +54,7 @@ public class AlarmInfo implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    @Exclude
+
     public Calendar getCalendar() {
         return calendar;
     }

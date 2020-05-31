@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ChangePassword extends AppCompatActivity {
-    EditText Emdp, Eoldmdp;
+    TextInputLayout Emdp, Eoldmdp;
     Button btnSave, btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +35,6 @@ public class ChangePassword extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnSave = findViewById(R.id.btnSave);
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,8 +46,8 @@ public class ChangePassword extends AppCompatActivity {
 
 
     public void changePass() {
-        final String mdp = Emdp.getText().toString().trim();
-        final String oldmdp = Eoldmdp.getText().toString().trim();
+        final String mdp = Emdp.getEditText().getText().toString().trim();
+        final String oldmdp = Eoldmdp.getEditText().getText().toString().trim();
 
 
         if (mdp.isEmpty() || mdp.length() < 6) {

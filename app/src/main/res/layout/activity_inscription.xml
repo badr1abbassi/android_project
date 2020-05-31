@@ -130,7 +130,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
-                app:endIconMode="clear_text"
+                app:passwordToggleEnabled="true"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_check"
                 app:startIconTint="@color/logo">
