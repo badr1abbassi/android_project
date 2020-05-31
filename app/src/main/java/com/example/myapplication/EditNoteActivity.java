@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
@@ -7,10 +8,18 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import com.example.myapplication.db.NotesDB;
 import com.example.myapplication.db.NotesDao;
 import com.example.myapplication.model.Note;
+import com.example.myapplication.model.Note_Firebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Date;
 
 
@@ -67,6 +76,8 @@ public class EditNoteActivity extends AppCompatActivity {
             } else {
                 temp.setNoteText(text);
                 temp.setNoteDate(date);
+                //-------------------------------------------> update node
+                //saveNoteFirebase(new Note_Firebase(temp));
                 dao.updateNote(temp); // change text and date and update note on database
             }
 
@@ -74,4 +85,18 @@ public class EditNoteActivity extends AppCompatActivity {
         }
 
     }
+    /*public void saveNoteFirebase(Note_Firebase n){
+        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Notes").child(n.getId()+"")
+                .setValue(n).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else {
+                    System.out.println("errrrrrrrr "+task.getException().getMessage());
+                }
+            }
+        });
+    }*/
 }
