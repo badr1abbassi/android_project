@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +27,7 @@ import java.util.Vector;
 
 public class Alarm extends AppCompatActivity {
 
-    Button addAlarm;
+    ImageButton addAlarm;
     alarmFragment bottomFragment;
     public static List<AlarmInfo> listeAlarmes;
     private DatabaseReference mDatabaseReference;

@@ -50,6 +50,41 @@ public class LocalisationManager extends AppCompatActivity {
     }
 
     private void getHisPosition(View v) {
+        if(MainActivity.linkedId==null){
+            noLinkedError();
+            return;
+        }
+        FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.linkedId)
+                .child("Localisation").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                        cord=dataSnapshot.getValue(Coordonee.class);
+                        sendLocalisation(cord);
+                    return;
+                } else {
+                    return;
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void noLinkedError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Votre compte n'est pas lié avec aucun utilisateur")
+                .setMessage("Voulez vous ajouter un compte?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        startActivity(new Intent(LocalisationManager.this, LinkAccount.class));
         FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.linkedId)
                 .child("Localisation").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -77,12 +112,27 @@ public class LocalisationManager extends AppCompatActivity {
         intent.putExtra("longitude",c.getLongitude());
         intent.putExtra("lattitude",c.getLatitude());
         startActivity(intent);
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public void sendLocalisation(Coordonee c){
+        Intent intent =new Intent(this,MapsActivity.class);
+        intent.putExtra("longitude",c.getLongitude());
+        intent.putExtra("lattitude",c.getLatitude());
+        startActivity(intent);
     }
 
     public void getMyPosition(View view) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
+            Intent intent1 = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent1);
 
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();

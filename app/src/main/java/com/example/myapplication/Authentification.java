@@ -64,6 +64,8 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
+                    MainActivity.linkedUser=null;
+                    MainActivity.linkedId=null;
                     finish();
                     Intent intent = new Intent(Authentification.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

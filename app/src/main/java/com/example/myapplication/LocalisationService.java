@@ -5,9 +5,13 @@ import android.Manifest;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -50,7 +54,9 @@ public class LocalisationService extends IntentService {
     public void getMyPosition() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
+
+           buildAlertMessageNoGps();
+
 
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             sendLocation();
@@ -109,7 +115,7 @@ public class LocalisationService extends IntentService {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
                     }
                 }
         });
