@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-    public static User Cuser = null, linkedUser = null;
+    public static User Cuser, linkedUser;
     DatabaseReference ref;
 
     Button localisation, camera, appel, sante, taches, aider;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String lattitude, longitude;
     private static final int REQUEST_CALL = 1;
     private static String number;
-    public static String linkedId = null;
+    public static String linkedId;
 
     private Intent ServLocalIntent;
     private FusedLocationProviderClient client;
@@ -77,10 +79,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            loadUser();
-            getLinked();
+
+        if (isConnected()) {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                finish();
+                startActivity(new Intent(this, Authentification.class));
+            } else {
+                loadUser();
+                getLinked();
+            }
         }
+
 
         sante.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,12 +151,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    protected void onStart() {
-        super.onStart();
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            finish();
-            startActivity(new Intent(this, Authentification.class));
+
+
+    public boolean isConnected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else {
+            connected = false;
         }
+        return connected;
     }
 
     private void myClick(View v) {
@@ -179,8 +195,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getAlarm(View v) {
-        Intent intent = new Intent(this, Alarm.class);
-        this.startActivity(intent);
+        if (isConnected()) {
+            Intent intent = new Intent(this, Alarm.class);
+            this.startActivity(intent);
+        } else {
+            noConnectionError();
+        }
 
     }
 
@@ -208,11 +228,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
             startActivity(new Intent(this, Authentification.class));
         } else if (id == R.id.profil) {
-            startActivity(new Intent(this, ProfilActivity.class));
+            if (isConnected()) {
+                startActivity(new Intent(this, ProfilActivity.class));
+            } else {
+                noConnectionError();
+            }
         } else if (id == R.id.password) {
-            startActivity(new Intent(this, ChangePassword.class));
+            if (isConnected()) {
+                startActivity(new Intent(this, ChangePassword.class));
+            } else {
+                noConnectionError();
+            }
         } else if (id == R.id.link) {
-            startActivity(new Intent(this, LinkAccount.class));
+            if (isConnected()) {
+                startActivity(new Intent(this, LinkAccount.class));
+            } else {
+                noConnectionError();
+            }
         } else if (id == R.id.share) {
             Intent myIntent = new Intent(Intent.ACTION_SEND);
             myIntent.setType("text/plain");
@@ -226,19 +258,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getAppel(View v) {
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-        } else {
-            if (linkedId != null) {
-                String dial = "tel:" + linkedUser.getPhone();
-                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+        if (isConnected()) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
             } else {
-                noLinkedError();
+                if (linkedId != null) {
+                    String dial = "tel:" + linkedUser.getPhone();
+                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                } else {
+                    noLinkedError();
+                }
             }
+        } else {
+            noConnectionError();
         }
+
     }
+
 
     public void noLinkedError() {
         new AlertDialog.Builder(this)
@@ -261,6 +299,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .show();
     }
 
+    public void noConnectionError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Problème de connexion")
+                .setMessage("vérifiez votre connexion et réessayez")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
     public void getTache(View v) {
         Intent intent = new Intent(this, TacheActivity.class);
         this.startActivity(intent);
@@ -279,8 +329,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
+                // Get Post object and use the values to update the UIs
                 Cuser = dataSnapshot.getValue(User.class);
+
             }
 
             @Override
@@ -322,7 +373,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     linkedUser = dataSnapshot.getValue(User.class);
-                    System.out.println("aah" + linkedUser.getName());
                     return;
                 } else {
                     System.out.println("kaaaaa");
