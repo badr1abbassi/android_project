@@ -1,13 +1,13 @@
 package com.example.myapplication;
 
-import android.net.Uri;
-
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class AlarmInfo implements Serializable {
+public class MedicamentInfos implements Serializable {
 
     private int id;
     private Date date;
@@ -17,9 +17,9 @@ public class AlarmInfo implements Serializable {
     private String imageUrl;
 
 
-    public AlarmInfo(){}
+    public MedicamentInfos(){}
 
-    public AlarmInfo(int id, Date date, boolean repeat, String message, String status,String imageUrl) {
+    public MedicamentInfos(int id, Date date, boolean repeat, String message, String status, String imageUrl) {
         this.id = id;
         this.date = date;
         this.repeat = repeat;
@@ -77,15 +77,22 @@ public class AlarmInfo implements Serializable {
     }
 
     @Exclude
-    public Calendar getCalendar() {
+    public Calendar getCalendar() throws ParseException {
+        String src=this.date.getYear()+"-"+this.date.getMonth()+"-"+this.date.getDayOfMonth()+" "+this.date.getHour()+":"+this.date.getMinute();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        java.util.Date myDate = format.parse(src);
         Calendar dateCal=Calendar.getInstance();
-        dateCal.set(Calendar.YEAR,this.date.getYear());
-        dateCal.set(Calendar.MONTH,this.date.getMonth());
-        dateCal.set(Calendar.DAY_OF_MONTH,this.date.getDayOfMonth());
-        dateCal.set(Calendar.HOUR,this.date.getHour());
-        dateCal.set(Calendar.MINUTE,this.date.getMinute());
-        dateCal.set(Calendar.SECOND,0);
+        dateCal.setTime(myDate);
         return  dateCal;
+    }
+    @Exclude
+    public Calendar getTime() throws ParseException{
+        String src=this.date.getHour()+":"+this.date.getMinute();
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+        java.util.Date myDate = format.parse(src);
+        Calendar dateCal=Calendar.getInstance();
+        dateCal.setTime(myDate);
+        return dateCal;
     }
 
 

@@ -15,24 +15,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,9 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -83,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isConnected()) {
             if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                 finish();
-                startActivity(new Intent(this, Authentification.class));
+                startActivity(new Intent(this, AuthentificationActivity.class));
             } else {
                 loadUser();
                 getLinked();
@@ -145,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             finish();
-            startActivity(new Intent(this, Authentification.class));
+            startActivity(new Intent(this, AuthentificationActivity.class));
         }
 
 
@@ -196,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getAlarm(View v) {
         if (isConnected()) {
-            Intent intent = new Intent(this, Alarm.class);
+            Intent intent = new Intent(this, ListeMedicamentActivity.class);
             this.startActivity(intent);
         } else {
             noConnectionError();
@@ -205,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getScanner(View v) {
-        Intent intent = new Intent(this, Scanner.class);
+        Intent intent = new Intent(this, ScannerActivity.class);
         this.startActivity(intent);
 
     }
@@ -226,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
             finish();
-            startActivity(new Intent(this, Authentification.class));
+            startActivity(new Intent(this, AuthentificationActivity.class));
         } else if (id == R.id.profil) {
             if (isConnected()) {
                 startActivity(new Intent(this, ProfilActivity.class));
@@ -235,13 +226,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } else if (id == R.id.password) {
             if (isConnected()) {
-                startActivity(new Intent(this, ChangePassword.class));
+                startActivity(new Intent(this, ChangePasswordActivity.class));
             } else {
                 noConnectionError();
             }
         } else if (id == R.id.link) {
             if (isConnected()) {
-                startActivity(new Intent(this, LinkAccount.class));
+                startActivity(new Intent(this, LinkAccountActivity.class));
             } else {
                 noConnectionError();
             }
@@ -288,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
-                        startActivity(new Intent(MainActivity.this, LinkAccount.class));
+                        startActivity(new Intent(MainActivity.this, LinkAccountActivity.class));
 
                     }
                 })

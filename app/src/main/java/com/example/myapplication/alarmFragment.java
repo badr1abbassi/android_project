@@ -1,9 +1,7 @@
 package com.example.myapplication;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
-import java.util.Vector;
 
 public class alarmFragment extends Fragment {
 
@@ -39,7 +36,7 @@ public class alarmFragment extends Fragment {
         return view;
     }
 
-    public void showAlarmes(List<AlarmInfo> listeAlarmes) {
-        rv.setAdapter(new MyAdapter(listeAlarmes));
+    public void showAlarmes(List<MedicamentInfos> listeAlarmes) {
+        rv.setAdapter(new MedicamentAdapter(listeAlarmes));
     }
 }

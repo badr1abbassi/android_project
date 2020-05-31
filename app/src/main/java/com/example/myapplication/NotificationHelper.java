@@ -9,19 +9,12 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.IOException;
 
@@ -29,10 +22,9 @@ public class NotificationHelper extends ContextWrapper {
     public static final String channelID="chanelID";
     public static final String channelName="channel";
     public static String title;
-    private String stringUri;
+    public static String stringUri;
     private NotificationManager manager;
-    private Bitmap bitmapImage=null;
-    NotificationCompat.BigPictureStyle style;
+
 
     public NotificationHelper(Context base) {
         super(base);
@@ -62,9 +54,10 @@ public class NotificationHelper extends ContextWrapper {
         this.stringUri=stringUri;
 
 
-        Intent activityIntent = new Intent(this, Medicament.class);
+        Intent activityIntent = new Intent(this, MedicamentActivity.class);
         activityIntent.putExtra("nomMed",(String) this.title);
         activityIntent.putExtra("url",(String) this.stringUri);
+        Log.d("notification url: ",stringUri);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this,
                 0, activityIntent, 0);

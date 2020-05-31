@@ -13,6 +13,7 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -23,7 +24,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,7 +33,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -55,10 +54,10 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 
-public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class AddMedicamentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     public static  final int ALARME_CODE = 250;
     private TimePicker alarmTimePicker;
@@ -73,7 +72,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     private int year=0;
 
 
-    AlarmInfo alarmInfo;
+    MedicamentInfos medicamentInfos;
     private String alarmeDate,alarmeTime;
     private boolean repeat;
     private String message;
@@ -84,15 +83,15 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     Uri image_uri;
     ImageButton image;
     Uri resultUri;
+    Date madate;
     private StorageReference mStorageReference;
     private DatabaseReference mDatabaseReference;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
         image=findViewById(R.id.imageIv2);
-
+        madate=new Date();
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +120,13 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
             }
         });
         mStorageReference=FirebaseStorage.getInstance().getReference("medicaments").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        final  Button annuler=findViewById(R.id.annulerAlarme);
+        annuler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private void showImageImportDialog() {
         String[] items = {" Camera", " Gallery"};
@@ -158,7 +164,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
         return result && result1;
     }
     private void requestCameraPermissions() {
-        ActivityCompat.requestPermissions(this,cameraPermission, Scanner.CAMERA_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this,cameraPermission, ScannerActivity.CAMERA_REQUEST_CODE);
     }
     private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(this,
@@ -166,7 +172,7 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     }
 
     private void requestStoragePermissions(){
-        ActivityCompat.requestPermissions(this,storagePermission, Scanner.STORAGE_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this,storagePermission, ScannerActivity.STORAGE_REQUEST_CODE);
     }
     private void requestAlarmePermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SET_ALARM) != PackageManager.PERMISSION_GRANTED) {
@@ -185,23 +191,23 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
         image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(cameraIntent, Scanner.IMAGE_PICK_CAMERA_CODE);
+        startActivityForResult(cameraIntent, ScannerActivity.IMAGE_PICK_CAMERA_CODE);
     }
     private void pickGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        startActivityForResult(intent, Scanner.IMAGE_PICK_GALLERY_CODE);
+        startActivityForResult(intent, ScannerActivity.IMAGE_PICK_GALLERY_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Scanner.IMAGE_PICK_GALLERY_CODE) {
+            if (requestCode == ScannerActivity.IMAGE_PICK_GALLERY_CODE) {
                 CropImage.activity(data.getData())
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
-            if (requestCode == Scanner.IMAGE_PICK_CAMERA_CODE) {
+            if (requestCode == ScannerActivity.IMAGE_PICK_CAMERA_CODE) {
                 CropImage.activity(image_uri)
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
@@ -231,22 +237,24 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
 
     public void setAlarm(View v){
         message=alarmTextView.getText().toString();
-        alarmInfo=new AlarmInfo();
-        alarmInfo.setRepeat(repeat);
-        alarmInfo.setMessage(message);
-        alarmInfo.setStatus("on");
+        medicamentInfos =new MedicamentInfos();
+        medicamentInfos.setRepeat(repeat);
+        medicamentInfos.setMessage(message);
+        medicamentInfos.setStatus("on");
 
         this.hour=alarmTimePicker.getCurrentHour();
         this.minute=alarmTimePicker.getCurrentMinute();
 
-        alarmInfo.setDate(new Date(minute,hour,dayOfMonth,month,year));
+        madate.setHour(this.hour);
+        madate.setMinute(this.minute);
+        medicamentInfos.setDate(madate);
 
         if(TextUtils.isEmpty(alarmTextView.getText())){
             alarmTextView.setError( "medicament obligatoire !" );
         }else {
-            alarmInfo.setId(Alarm.listeAlarmes.size()+1);
-            uploadImage(alarmInfo.getId());
-            Intent intent = new Intent(AddAlarm.this, Alarm.class);
+            medicamentInfos.setId(ListeMedicamentActivity.listeAlarmes.size()+1);
+            uploadImage(medicamentInfos.getId());
+            Intent intent = new Intent(AddMedicamentActivity.this, ListeMedicamentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
@@ -274,32 +282,27 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
             imageRef.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(AddAlarm.this,"upload successful",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddMedicamentActivity.this,"upload successful",Toast.LENGTH_SHORT).show();
                     Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
                     firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            alarmInfo.setImageUrl(uri.toString());
-                            Log.e("TAG:", "the url is: " + uri.toString());
-                            saveAlarm(alarmInfo);
-                            startAlarm(alarmInfo);
-                            Toast.makeText(AddAlarm.this,"image ajoutée",Toast.LENGTH_SHORT).show();
+                            medicamentInfos.setImageUrl(uri.toString());
+                            saveAlarm(medicamentInfos);
+                            try {
+                                startAlarm(medicamentInfos);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(AddMedicamentActivity.this,"image ajoutée",Toast.LENGTH_SHORT).show();
 
                         }
                     });
-                    //for progressBar
-                    /* Handler handler=new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mProgressBar.setProgress(0);
-                        }
-                    },500);*/
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddAlarm.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddMedicamentActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                     Log.d("erreur Image",e.getMessage());
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -329,39 +332,50 @@ public class AddAlarm extends AppCompatActivity implements DatePickerDialog.OnDa
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         this.year=year;
         this.month=month;
+        this.month++;
         this.dayOfMonth=dayOfMonth;
-        date.setText(dayOfMonth+"/"+month+"/"+year);
+        madate.setYear(this.year);
+        madate.setMonth(this.month);
+        madate.setDayOfMonth(this.dayOfMonth);
+        date.setText(this.dayOfMonth+"/"+this.month+"/"+this.year);
     }
 
-    public void startAlarm(AlarmInfo alarmInfo){
+    public void startAlarm(MedicamentInfos medicamentInfos) throws ParseException {
         AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent =new Intent(this,AlertReceiver.class);
-        intent.putExtra("title",alarmInfo.getMessage());
-        intent.putExtra("uriImage",alarmInfo.getImageUrl());
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,alarmInfo.getId(),intent,0);
+        intent.putExtra("title", medicamentInfos.getMessage());
+        intent.putExtra("uriImage", medicamentInfos.getImageUrl());
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(this, medicamentInfos.getId(),intent,0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,10000,pendingIntent);
-            Toast.makeText(this, "Alarme"+alarmInfo.getId()+"ON", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
-
+            if(medicamentInfos.getDate().getMonth()!=0 && medicamentInfos.getDate().getYear()!=0) {
+                Long diff = medicamentInfos.getCalendar().getTimeInMillis();
+                System.out.println("getTime(): " + medicamentInfos.getCalendar().getTime().toString());
+                Log.d("diff Calandar", diff + "");
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, diff, pendingIntent);
+            }else{
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                        medicamentInfos.getTime().getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            }
+            //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,diff,3600000,pendingIntent);
+            Toast.makeText(this, "Alarme"+ medicamentInfos.getId()+"ON", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
         }
     }
-    public void cancelAlarm(){
+    public void cancelAlarm(int id){
         AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent =new Intent(this,AlertReceiver.class);
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,1,intent,0);
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,id,intent,0);
         alarmManager.cancel(pendingIntent);
         Toast.makeText(this, "Alarme OFF", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
     }
 
-    public void saveAlarm(AlarmInfo alarmInfo){
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("alarmes").child("alarm"+alarmInfo.getId())
-                .setValue(alarmInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void saveAlarm(MedicamentInfos medicamentInfos){
+        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("alarmes").child("alarm"+ medicamentInfos.getId())
+                .setValue(medicamentInfos).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
                     Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddAlarm.this, Alarm.class);
+                    Intent intent = new Intent(AddMedicamentActivity.this, ListeMedicamentActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }

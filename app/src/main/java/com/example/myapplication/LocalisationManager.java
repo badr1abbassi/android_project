@@ -1,20 +1,22 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -84,7 +86,7 @@ public class LocalisationManager extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
-                        startActivity(new Intent(LocalisationManager.this, LinkAccount.class));
+                        startActivity(new Intent(LocalisationManager.this, LinkAccountActivity.class));
         FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.linkedId)
                 .child("Localisation").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -108,7 +110,7 @@ public class LocalisationManager extends AppCompatActivity {
         });
     }
     public void sendLocalisation(Coordonee c){
-        Intent intent =new Intent(this,MapsActivity.class);
+        Intent intent =new Intent(LocalisationManager.this,MapsActivity.class);
         intent.putExtra("longitude",c.getLongitude());
         intent.putExtra("lattitude",c.getLatitude());
         startActivity(intent);

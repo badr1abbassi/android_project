@@ -3,14 +3,9 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -23,13 +18,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-public class Alarm extends AppCompatActivity {
+public class ListeMedicamentActivity extends AppCompatActivity {
 
     ImageButton addAlarm;
     alarmFragment bottomFragment;
-    public static List<AlarmInfo> listeAlarmes;
+    public static List<MedicamentInfos> listeAlarmes;
     private DatabaseReference mDatabaseReference;
 
     @Override
@@ -43,8 +37,8 @@ public class Alarm extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    AlarmInfo alarmInfo=postSnapshot.getValue(AlarmInfo.class);
-                    listeAlarmes.add(alarmInfo);
+                    MedicamentInfos medicamentInfos =postSnapshot.getValue(MedicamentInfos.class);
+                    listeAlarmes.add(medicamentInfos);
                    // startAlarm(alarmInfo);
                 }
                 bottomFragment.showAlarmes(listeAlarmes);
@@ -52,7 +46,7 @@ public class Alarm extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(Alarm.this,databaseError.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListeMedicamentActivity.this,databaseError.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,18 +59,8 @@ public class Alarm extends AppCompatActivity {
         });
     }
     public void myClick(View v){
-        Intent intent =new Intent(this,AddAlarm.class);
+        Intent intent =new Intent(this, AddMedicamentActivity.class);
         this.startActivity(intent);
     }
-   /*public void startAlarm(AlarmInfo alarmInfo){
-        AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent =new Intent(this,AlertReceiver.class);
-        intent.putExtra("title",alarmInfo.getMessage());
-        intent.putExtra("uriImage",alarmInfo.getImageUrl());
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,alarmInfo.getId(),intent,0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,alarmInfo.getCalendar().getTimeInMillis(),pendingIntent);
-            Toast.makeText(this, "Alarme "+alarmInfo.getId()+" ON", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
-        }
-    }*/
+
 }
