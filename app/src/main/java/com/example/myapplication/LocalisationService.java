@@ -72,24 +72,24 @@ public class LocalisationService extends IntentService {
                 double latti = location.getLatitude();
                 double longi = location.getLongitude();
                 c.setLatitude(String.valueOf(latti));
-                c.setLongitue(String.valueOf(longi));
+                c.setLongitude(String.valueOf(longi));
 
             } else if (location1 != null) {
                 double latti = location1.getLatitude();
                 double longi = location1.getLongitude();
                 c.setLatitude(String.valueOf(latti));
-                c.setLongitue(String.valueOf(longi));
+                c.setLongitude(String.valueOf(longi));
 
 
             } else if (location2 != null) {
                 double latti = location2.getLatitude();
                 double longi = location2.getLongitude();
                 c.setLatitude(String.valueOf(latti));
-                c.setLongitue(String.valueOf(longi));
+                c.setLongitude(String.valueOf(longi));
             } else {
                 Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
             }
-            if (c.getLongitue() != null && c.getLatitude() != null) {
+            if (c.getLongitude() != null && c.getLatitude() != null) {
                 saveLocalisation(c);
             } else {
                 Toast.makeText(this, "impossible d'obtenir votre localisation", Toast.LENGTH_SHORT).show();
@@ -103,14 +103,16 @@ public class LocalisationService extends IntentService {
 
 
     public void saveLocalisation(Coordonee c){
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Localisation")
-                .setValue(c).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Localisation")
+                    .setValue(c).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
         });
+        }
     }
 }

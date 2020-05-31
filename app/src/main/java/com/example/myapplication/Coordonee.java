@@ -1,23 +1,23 @@
 package com.example.myapplication;
 
 public class Coordonee {
-    String longitue;
+    String longitude;
     String latitude;
 
     public Coordonee() {
     }
 
-    public Coordonee(String longitue, String latitude) {
-        this.longitue = longitue;
+    public Coordonee(String longitude, String latitude) {
+        this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public String getLongitue() {
-        return longitue;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLongitue(String longitue) {
-        this.longitue = longitue;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getLatitude() {
