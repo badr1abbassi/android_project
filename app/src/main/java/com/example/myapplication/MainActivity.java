@@ -14,19 +14,25 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +40,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.fastadapter.listeners.CustomEventHook;
+
+
+import java.util.Scanner;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -52,6 +64,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Intent ServLocalIntent;
     private FusedLocationProviderClient client;
+
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
+    public static final String Name = "nameKey";
+    public static final String Email = "emailKey";
+    public static final String phone = "phoneKey";
+    public static final String lId = "idKey";
+    public static final String lName = "lnameKey";
+    public static final String lEmail = "lemailKey";
+    public static final String lphone = "lphoneKey";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +101,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 loadUser();
                 getLinked();
+                sharedpreferences = getSharedPreferences(mypreference,
+                        Context.MODE_PRIVATE);
             }
-        }
 
+        } else {
+            sharedpreferences = getSharedPreferences(mypreference,
+                    Context.MODE_PRIVATE);
+            if (sharedpreferences.contains(Name)) {
+                Cuser = new User(sharedpreferences.getString(Email, ""),sharedpreferences.getString(phone, ""),sharedpreferences.getString(Name, ""));
+                linkedUser = new User(sharedpreferences.getString(lEmail, ""),sharedpreferences.getString(lphone, ""),sharedpreferences.getString(lName, ""));
+                linkedId = sharedpreferences.getString(lId,"");
+            }
+            else
+                noConnectionError();
+
+        }
 
         sante.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         getPermissionLocalisation();
 
-        ServLocalIntent = new Intent(this, LocalisationService.class);
+         ServLocalIntent=new Intent(this,LocalisationService.class);
         startService(ServLocalIntent);
     }
 
@@ -129,6 +165,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         ServLocalIntent = new Intent(this, LocalisationService.class);
         startService(ServLocalIntent);
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        if(Cuser!=null) {
+            editor.putString(Name, Cuser.getName());
+            editor.putString(Email, Cuser.getEmail());
+            editor.putString(phone, Cuser.getPhone());
+            editor.putString(lName, linkedUser.getName());
+            editor.putString(lEmail, linkedUser.getEmail());
+            editor.putString(lphone, linkedUser.getPhone());
+            editor.putString(lId, linkedId);
+            editor.commit(); // commit changes
+        }
     }
 
     @Override
@@ -142,9 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-    public boolean isConnected() {
+    public boolean  isConnected() {
         boolean connected = false;
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
@@ -219,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
             startActivity(new Intent(this, AuthentificationActivity.class));
         } else if (id == R.id.profil) {
-            if (isConnected()) {
+            if (Cuser!=null) {
                 startActivity(new Intent(this, ProfilActivity.class));
             } else {
                 noConnectionError();
@@ -231,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 noConnectionError();
             }
         } else if (id == R.id.link) {
-            if (isConnected()) {
+            if (linkedUser!=null) {
                 startActivity(new Intent(this, LinkAccountActivity.class));
             } else {
                 noConnectionError();
@@ -249,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getAppel(View v) {
-        if (isConnected()) {
+        if (linkedUser.getPhone()!=null) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this,
@@ -322,7 +369,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UIs
                 Cuser = dataSnapshot.getValue(User.class);
-
             }
 
             @Override
@@ -364,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     linkedUser = dataSnapshot.getValue(User.class);
+                    System.out.println("aah"+linkedUser.getName());
                     return;
                 } else {
                     System.out.println("kaaaaa");

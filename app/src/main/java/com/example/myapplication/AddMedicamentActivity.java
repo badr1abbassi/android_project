@@ -92,6 +92,9 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         setContentView(R.layout.activity_add_alarm);
         image=findViewById(R.id.imageIv2);
         madate=new Date();
+        cameraPermission = new String [] {Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
