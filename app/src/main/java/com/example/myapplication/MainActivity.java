@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -11,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,7 +38,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mikepenz.fastadapter.listeners.CustomEventHook;
 
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-    public static User Cuser, linkedUser;
+    public static User Cuser = null, linkedUser = null;
     DatabaseReference ref;
 
     Button localisation, camera, appel, sante, taches, aider;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String lattitude, longitude;
     private static final int REQUEST_CALL = 1;
     private static String number;
-    public static String linkedId;
+    public static String linkedId = null;
 
     private Intent ServLocalIntent;
     private FusedLocationProviderClient client;
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         getPermissionLocalisation();
 
-         ServLocalIntent=new Intent(this,LocalisationService.class);
+        ServLocalIntent = new Intent(this, LocalisationService.class);
         startService(ServLocalIntent);
     }
 
@@ -148,30 +149,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, Authentification.class));
         }
     }
-    private	void myClick(View	v) {
-            switch (v.getId()){
-                case R.id.buttonLocalisation:
-                    getLocalisation(v);
-                    break;
-                case R.id.buttonHealth:
-                    getAlarm(v);
-                    break;
-                case R.id.buttonCamera:
-                    getScanner(v);
-                    break;
-                case R.id.buttonAppel:
-                   getAppel(v);
-                    break;
-                case R.id.buttonTaches:
-                    getTache(v);
-                    break;
-                default:
-                    Toast.makeText(this, v.getId()+"", Toast.LENGTH_SHORT).show();
-                    break;
-            }
+
+    private void myClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonLocalisation:
+                getLocalisation(v);
+                break;
+            case R.id.buttonHealth:
+                getAlarm(v);
+                break;
+            case R.id.buttonCamera:
+                getScanner(v);
+                break;
+            case R.id.buttonAppel:
+                getAppel(v);
+                break;
+            case R.id.buttonTaches:
+                getTache(v);
+                break;
+            default:
+                Toast.makeText(this, v.getId() + "", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
+
     private void getLocalisation(View v) {
-        Intent intent =new Intent(this,LocalisationManager.class);
+        Intent intent = new Intent(this, LocalisationManager.class);
         this.startActivity(intent);
     }
 
@@ -228,21 +231,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
         } else {
-            if(linkedId != null) {
+            if (linkedId != null) {
                 String dial = "tel:" + linkedUser.getPhone();
                 startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-            }
-            else {
-
+            } else {
+                noLinkedError();
             }
         }
+    }
+
+    public void noLinkedError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Votre compte n'est pas lié avec aucun utilisateur")
+                .setMessage("Voulez vous ajouter un compte?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        startActivity(new Intent(MainActivity.this, LinkAccount.class));
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void getTache(View v) {
         Intent intent = new Intent(this, TacheActivity.class);
         this.startActivity(intent);
     }
-    public void getPermissionLocalisation(){
+
+    public void getPermissionLocalisation() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
                 (MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -298,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     linkedUser = dataSnapshot.getValue(User.class);
-                    System.out.println("aah"+linkedUser.getName());
+                    System.out.println("aah" + linkedUser.getName());
                     return;
                 } else {
                     System.out.println("kaaaaa");

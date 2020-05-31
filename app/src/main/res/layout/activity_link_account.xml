@@ -24,6 +24,19 @@
                 android:id="@+id/include"
                 layout="@layout/header" />
 
+            <Button
+                android:id="@+id/btnAsk"
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Demander l'identifiant"
+                tools:ignore="InvalidId"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+               />
+
             <TextView
                 android:id="@+id/tvLinked"
                 android:layout_width="match_parent"

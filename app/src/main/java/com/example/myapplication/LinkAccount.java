@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LinkAccount extends AppCompatActivity {
     TextInputLayout userId;
     TextView tvLinked;
-    Button add, btnBack;
+    Button add, btnBack,btnAsk;
     String identif;
     DatabaseReference ref;
 
@@ -36,6 +36,7 @@ public class LinkAccount extends AppCompatActivity {
         add = findViewById(R.id.btnAdd);
         btnBack = findViewById(R.id.btnBack);
         tvLinked = findViewById(R.id.tvLinked);
+        btnAsk = findViewById(R.id.btnAsk);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,10 +49,23 @@ public class LinkAccount extends AppCompatActivity {
                 alreadyLinked();
             }
         });
+        btnAsk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askForId();
+            }
+        });
         ref = FirebaseDatabase.getInstance().getReference();
         alreadyLinked();
 
 
+    }
+    public void askForId() {
+        Intent myIntent = new Intent(Intent.ACTION_SEND);
+        myIntent.setType("text/plain");
+        String text = "Bonjour\nPouvez-vous partager avec moi votre identifiant de l'application HELP ME pour qu'on puisse lier nos comptes";
+        myIntent.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(myIntent, "Partager votre ID"));
     }
 
     public void linkAccount() {
