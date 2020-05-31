@@ -9,20 +9,30 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
 
 public class NotificationHelper extends ContextWrapper {
     public static final String channelID="chanelID";
     public static final String channelName="channel";
+    public static String title;
+    private String stringUri;
     private NotificationManager manager;
+    private Bitmap bitmapImage=null;
+    NotificationCompat.BigPictureStyle style;
 
     public NotificationHelper(Context base) {
         super(base);
@@ -47,18 +57,23 @@ public class NotificationHelper extends ContextWrapper {
     }
     public NotificationCompat.Builder getChannelNotification(String title, String stringUri) throws IOException {
         long[] v = {500,1000};
-        Uri uri;
-        uri = Uri.parse(stringUri);
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
 
-        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
-        style.setBigContentTitle("c'est le temp de prendre votre medicament");
-        style.setSummaryText(title);
-        style.bigPicture(bitmap);
+        this.title=title;
+        this.stringUri=stringUri;
+
+
+        Intent activityIntent = new Intent(this, Medicament.class);
+        activityIntent.putExtra("nomMed",(String) this.title);
+        activityIntent.putExtra("url",(String) this.stringUri);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this,
+                0, activityIntent, 0);
         return new NotificationCompat.Builder(getApplicationContext(),channelID)
                 .setSmallIcon(R.drawable.ic_alarm)
+                .setContentTitle("MEDICAMENT")
+                .setContentText("c'est le temps de prendre :"+this.title)
                 .setVibrate(v)
                 .setSound( RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), AudioManager.STREAM_MUSIC)
-                .setStyle(style);
+                .setContentIntent(contentIntent);
     }
 }

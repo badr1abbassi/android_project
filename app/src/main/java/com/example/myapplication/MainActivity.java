@@ -43,12 +43,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     Button localisation,camera,appel,sante,taches,aider;
-    private static final int REQUEST_LOCATION = 1;
-    LocationManager locationManager;
-    String lattitude,longitude;
+
     private static final int REQUEST_CALL = 1;
     private static final String number = "+212625733640";
-
+    private Intent ServLocalIntent;
     private FusedLocationProviderClient client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +101,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.setNavigationItemSelectedListener(this);
+        getPermissionLocalisation();
+
+         ServLocalIntent=new Intent(this,LocalisationService.class);
+        startService(ServLocalIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServLocalIntent = new Intent(this, LocalisationService.class);
+        startService(ServLocalIntent);
     }
 
     @Override
@@ -121,11 +130,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this,Authentification.class));
         }
     }
-
-    private	void	myClick(View	v) {
+    private	void myClick(View	v) {
             switch (v.getId()){
                 case R.id.buttonLocalisation:
-                    getPosition(v);
+                    getLocalisation(v);
                     break;
                 case R.id.buttonHealth:
                     getAlarm(v);
@@ -144,39 +152,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
             }
     }
-
-    public void getPosition2(View v){
-        getPermissionLocalisation();
-        //if(ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED) {
-            client.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        Toast.makeText(MainActivity.this, "localisaton:" + location, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "localisaton: NULL", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        /*}else{
-            Toast.makeText(MainActivity.this, "localisaton: permission", Toast.LENGTH_SHORT).show();
-            getPermissionLocalisation();
-        }*/
-    }
-    public void getPermissionLocalisation(){
-        ActivityCompat.requestPermissions(MainActivity.this, new String[]{ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-    }
-
-
-
-    public void getPosition(View view) {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
-
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            getLocation();
-        }
+    private void getLocalisation(View v) {
+        Intent intent =new Intent(this,LocalisationManager.class);
+        this.startActivity(intent);
     }
     public  void getAlarm(View v){
         Intent intent =new Intent(this,Alarm.class);
@@ -189,62 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
-                (MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-
-        } else {
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-            if (location != null) {
-                double latti = location.getLatitude();
-                double longi = location.getLongitude();
-                lattitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
-
-            } else if (location1 != null) {
-                double latti = location1.getLatitude();
-                double longi = location1.getLongitude();
-                lattitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
-
-
-            } else if (location2 != null) {
-                double latti = location2.getLatitude();
-                double longi = location2.getLongitude();
-                lattitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
-
-
-
-            } else {
-                Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
-
-            }
-            if(longitude!=null && lattitude !=null){
-                Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude, Toast.LENGTH_SHORT).show();
-                Intent intent =new Intent(this,MapsActivity.class);
-                intent.putExtra("longitude",longitude);
-                intent.putExtra("lattitude",lattitude);
-                startActivity(intent);
-            }else{
-                Toast.makeText(this, "makayn walo", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    protected void buildAlertMessageNoGps() {
-
-        Toast.makeText(this, "activer gps", Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onBackPressed() {
@@ -287,6 +209,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void getTache(View v){
         Intent intent =new Intent(this, TacheActivity.class);
         this.startActivity(intent);
+    }
+    public void getPermissionLocalisation(){
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 13);
+
+        }
     }
 
 }

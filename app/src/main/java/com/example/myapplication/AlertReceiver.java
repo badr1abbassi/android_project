@@ -25,7 +25,7 @@ public class AlertReceiver extends BroadcastReceiver {
             title= (String)b.get("title");
             uriString=(String) b.get("uriImage");
             if(title!=null && uriString!=null) {
-        NotificationHelper notificationHelper=new NotificationHelper(context);
+            NotificationHelper notificationHelper=new NotificationHelper(context);
                 NotificationCompat.Builder nb= null;
                 try {
                     nb = notificationHelper.getChannelNotification(title,uriString);
