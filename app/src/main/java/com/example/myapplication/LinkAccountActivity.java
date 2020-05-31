@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class LinkAccount extends AppCompatActivity {
+public class LinkAccountActivity extends AppCompatActivity {
     TextInputLayout userId;
     TextView tvLinked;
     Button add, btnBack,btnAsk;

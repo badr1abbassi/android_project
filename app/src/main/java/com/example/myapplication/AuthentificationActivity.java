@@ -1,12 +1,10 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -16,16 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
-public class Authentification extends AppCompatActivity implements View.OnClickListener {
+public class AuthentificationActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText editTextemail , editTextmdp;
     ProgressBar progressBar;
@@ -67,7 +57,7 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
                     MainActivity.linkedUser=null;
                     MainActivity.linkedId=null;
                     finish();
-                    Intent intent = new Intent(Authentification.this, MainActivity.class);
+                    Intent intent = new Intent(AuthentificationActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 } else {
@@ -85,7 +75,7 @@ public class Authentification extends AppCompatActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.textViewAuth:
                 finish();
-                startActivity(new Intent(Authentification.this,Inscription.class));
+                startActivity(new Intent(AuthentificationActivity.this, InscriptionActivity.class));
                 break;
             case R.id.btnAuth:
                 authentification();

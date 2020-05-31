@@ -40,7 +40,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Locale;
 
-public class Scanner extends AppCompatActivity {
+public class ScannerActivity extends AppCompatActivity {
     TextInputLayout mResultET;
     ImageView mPreviewIv;
     Button btConvert;

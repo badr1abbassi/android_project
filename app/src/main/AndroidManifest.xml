@@ -26,15 +26,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LinkAccount"
+            android:name=".LinkAccountActivity"
             android:label="Lier votre compte"
             android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".ChangePassword"
+            android:name=".ChangePasswordActivity"
             android:label="Changer le mot de passe"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".LocalisationManager"></activity>
-        <activity android:name=".Medicament" />
+        <activity android:name=".MedicamentActivity"
+            android:parentActivityName=".MainActivity"/>
 
         <activity
             android:name=".SplashActivity"
@@ -50,15 +51,15 @@
             android:label="Profil"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Inscription"
+            android:name=".InscriptionActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge" />
         <activity
-            android:name=".Authentification"
+            android:name=".AuthentificationActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge" />
         <activity
-            android:name=".AddAlarm"
+            android:name=".AddMedicamentActivity"
             android:label="Ajouter une alarme"
-            android:parentActivityName=".Alarm" />
+            android:parentActivityName=".ListeMedicamentActivity" />
         <activity
             android:name=".EditNoteActivity"
             android:label="Ajouter une note"
@@ -69,7 +70,7 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".alarmFragment" />
         <activity
-            android:name=".Alarm"
+            android:name=".ListeMedicamentActivity"
             android:label="Alarm"
             android:parentActivityName=".MainActivity" />
         <!--
@@ -103,7 +104,7 @@
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".Scanner"
+            android:name=".ScannerActivity"
             android:label="@string/title_activity_scanner"
             android:parentActivityName=".MainActivity" />
         <activity

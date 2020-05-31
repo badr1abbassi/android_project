@@ -1,9 +1,13 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -137,6 +141,10 @@ public class ProfilActivity extends AppCompatActivity {
             Eemail.requestFocus();
             return;
         }
+        if(!isConnected()){
+            noConnectionError();
+            return;
+        }
         if(oldmdp.isEmpty()){
             Eoldmdp.setError("Vous devez entrer votre mot de passe");
             Eoldmdp.requestFocus();
@@ -178,13 +186,36 @@ public class ProfilActivity extends AppCompatActivity {
                                         }
                                     });
                         } else {
-                            Eoldmdp.setError("Le mot de passe est incorrecte");
+                            Eoldmdp.setError("Mot de passe incorrect");
                             Eoldmdp.requestFocus();
                             return;
                         }
 
                     }
                 });
+    }
+    public void noConnectionError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Problème de connexion")
+                .setMessage("vérifiez votre connexion et réessayez")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+    public boolean  isConnected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else {
+            connected = false;
+        }
+        return connected;
     }
 
 }

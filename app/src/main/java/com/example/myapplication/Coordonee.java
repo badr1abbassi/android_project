@@ -16,8 +16,8 @@ public class Coordonee {
         return longitude;
     }
 
-    public void setLongitude(String longitue) {
-        this.longitude = longitue;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getLatitude() {

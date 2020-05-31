@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -87,8 +86,34 @@ public class LocalisationManager extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
-                        startActivity(new Intent(LocalisationManager.this, LinkAccount.class));
+                        startActivity(new Intent(LocalisationManager.this, LinkAccountActivity.class));
+        FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.linkedId)
+                .child("Localisation").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                        cord=dataSnapshot.getValue(Coordonee.class);
+                        System.out.println("hhhhhhhhhhhhhhhhhhhhhh"+cord.getLatitude());
+                        sendLocalisation(cord);
+                    return;
+                } else {
+                    System.out.println("pbbbbbbbbbbbbbbbbbb"+cord.getLatitude());
+                    return;
 
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void sendLocalisation(Coordonee c){
+        Intent intent =new Intent(LocalisationManager.this,MapsActivity.class);
+        intent.putExtra("longitude",c.getLongitude());
+        intent.putExtra("lattitude",c.getLatitude());
+        startActivity(intent);
                     }
                 })
 
@@ -150,8 +175,8 @@ public class LocalisationManager extends AppCompatActivity {
                 Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
             }
             if(cord.getLongitude()!=null && cord.getLatitude() !=null){
-                Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + cord.getLatitude()
-                        + "\n" + "Longitude = " + cord.getLongitude(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + lattitude
+                        + "\n" + "Longitude = " + longitude, Toast.LENGTH_SHORT).show();
                 sendLocalisation(cord);
             }else{
                 Toast.makeText(this, "makayn walo", Toast.LENGTH_SHORT).show();

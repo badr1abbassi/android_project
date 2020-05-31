@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Medicament">
+    tools:context=".MedicamentActivity">
 
     <TextView
         android:id="@+id/nomMedic"
@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nomMedic"
-        app:srcCompat="@drawable/health" />
+       />
 
     <Button
         android:id="@+id/btn_annuler"

@@ -1,8 +1,12 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -23,7 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ChangePassword extends AppCompatActivity {
+public class ChangePasswordActivity extends AppCompatActivity {
     TextInputLayout Emdp, Eoldmdp;
     Button btnSave, btnBack;
     @Override
@@ -46,6 +50,10 @@ public class ChangePassword extends AppCompatActivity {
 
 
     public void changePass() {
+        if(!isConnected()){
+            noConnectionError();
+            return;
+        }
         final String mdp = Emdp.getEditText().getText().toString().trim();
         final String oldmdp = Eoldmdp.getEditText().getText().toString().trim();
 
@@ -89,6 +97,29 @@ public class ChangePassword extends AppCompatActivity {
                     }
                 });
 
+    }
+    public void noConnectionError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Problème de connexion")
+                .setMessage("vérifiez votre connexion et réessayez")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+    public boolean  isConnected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else {
+            connected = false;
+        }
+        return connected;
     }
 
 }

@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -18,12 +16,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.regex.Pattern;
-
-public class Inscription extends AppCompatActivity implements View.OnClickListener {
+public class InscriptionActivity extends AppCompatActivity implements View.OnClickListener {
     TextInputLayout editTextemail , editTextmdp, editTextConfmdp,editTextName,editTextTel;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
@@ -103,7 +98,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
                                         Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(Inscription.this, Authentification.class);
+                                        Intent intent = new Intent(InscriptionActivity.this, AuthentificationActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         finish();
                                         startActivity(intent);
@@ -137,7 +132,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.textViewAuth:
                 finish();
-                startActivity(new Intent(this,Authentification.class));
+                startActivity(new Intent(this, AuthentificationActivity.class));
                 break;
         }
     }

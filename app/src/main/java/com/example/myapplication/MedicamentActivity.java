@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-public class Medicament extends AppCompatActivity {
+public class MedicamentActivity extends AppCompatActivity {
 
     private String url;
     private String nomMedic;
@@ -29,9 +31,22 @@ public class Medicament extends AppCompatActivity {
         btn_annuler=findViewById(R.id.btn_annuler);
         if(getIntent().getSerializableExtra("url")!=null){
             url=(String) getIntent().getSerializableExtra("url");
-            Picasso.get().load(url).centerCrop().fit().into(imageView);
+            /*Picasso.get().load(url).placeholder(R.drawable.health)// Place holder image from drawable folder
+                    .error(R.drawable.x).centerCrop().fit().into(imageView);*/
+            Picasso picasso = new Picasso.Builder(this)
+                    .listener(new Picasso.Listener() {
+                        @Override
+                        public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                            Log.d("picasso","exception"+exception.getMessage());
+                            Log.d("picasso url",url);
+                        }
+                    })
+                    .build();
+            picasso.load(NotificationHelper.stringUri)
+                    .fit()
+                    .into(imageView);
         }
-            nomMedic=(String)NotificationHelper.title;
+            nomMedic=(String) NotificationHelper.title;
             textView.setText(nomMedic);
             btn_annuler.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,7 +13,6 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,6 +23,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -88,6 +89,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     public static  final int STORAGE_REQUEST_CODE1 = 401;
     public static  final int IMAGE_PICK_GALLERY_CODE1 = 1003;
     public static  final int IMAGE_PICK_CAMERA_CODE1 = 1002;
+    Date madate;
     private StorageReference mStorageReference;
     private DatabaseReference mDatabaseReference;
 
@@ -97,6 +99,9 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         setContentView(R.layout.activity_add_alarm);
         image=findViewById(R.id.imageIv2);
         madate=new Date();
+        cameraPermission = new String [] {Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,9 +137,6 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
                 finish();
             }
         });
-        cameraPermission1 = new String [] {Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermission1 = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
     private void showImageImportDialog() {
         String[] items = {" Camera", " Gallery"};
@@ -172,7 +174,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         return result && result1;
     }
     private void requestCameraPermissions() {
-        ActivityCompat.requestPermissions(this,cameraPermission1,CAMERA_REQUEST_CODE1);
+        ActivityCompat.requestPermissions(this,cameraPermission, ScannerActivity.CAMERA_REQUEST_CODE);
     }
     private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(this,
@@ -180,7 +182,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     }
 
     private void requestStoragePermissions(){
-        ActivityCompat.requestPermissions(this,storagePermission1,STORAGE_REQUEST_CODE1);
+        ActivityCompat.requestPermissions(this,storagePermission, ScannerActivity.STORAGE_REQUEST_CODE);
     }
     private void requestAlarmePermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SET_ALARM) != PackageManager.PERMISSION_GRANTED) {
@@ -337,6 +339,14 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
 
                         }
                     });
+                    //for progressBar
+                    /* Handler handler=new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mProgressBar.setProgress(0);
+                        }
+                    },500);*/
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

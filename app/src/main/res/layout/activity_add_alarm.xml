@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddAlarm">
+    tools:context=".AddMedicamentActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,32 +51,10 @@
                 android:id="@+id/dateMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="20dp"
                 android:text="Chaque jour" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="32dp">
-
-            <TextView
-                android:id="@+id/rep"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="repeat :"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:fontFamily="sans-serif-smallcaps" />
-
-            <ToggleButton
-                android:id="@+id/alarmToggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:onClick="onToggleClicked"
-                android:text="Alarm On/Off" />
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -87,6 +65,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
             <EditText
@@ -98,14 +77,14 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="10px"
                 android:gravity="center"
-                android:hint="Entrer votre message" />
+                android:hint="Entrer votre description" />
 
 
             <ImageButton
                 android:id="@+id/imageIv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
