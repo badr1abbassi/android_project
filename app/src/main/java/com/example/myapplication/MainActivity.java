@@ -21,18 +21,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,12 +35,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mikepenz.fastadapter.listeners.CustomEventHook;
-
-
-import java.util.Scanner;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -156,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         getPermissionLocalisation();
 
-         ServLocalIntent=new Intent(this,LocalisationService.class);
+        ServLocalIntent=new Intent(this,LocalisationService.class);
         startService(ServLocalIntent);
     }
 
@@ -168,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        if(Cuser!=null) {
+        if(Cuser!=null && linkedUser!=null) {
             editor.putString(Name, Cuser.getName());
             editor.putString(Email, Cuser.getEmail());
             editor.putString(phone, Cuser.getPhone());
@@ -289,6 +278,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String ident = FirebaseAuth.getInstance().getCurrentUser().getUid();
             myIntent.putExtra(Intent.EXTRA_TEXT, ident);
             startActivity(Intent.createChooser(myIntent, "Partager votre ID"));
+        }else if (id == R.id.settings) {
+            Intent intent=new Intent(this, Parametres.class);
+            startActivity(intent);
         }
 
 
@@ -404,7 +396,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getLinkedUser() {
-
         FirebaseDatabase.getInstance().getReference().child("Users").child(linkedId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

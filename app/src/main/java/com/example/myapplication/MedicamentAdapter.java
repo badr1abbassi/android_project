@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -99,9 +101,7 @@ public class MedicamentAdapter extends RecyclerView.Adapter<MedicamentAdapter.My
                             .setPositiveButton("Supprimer", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    Toast.makeText(itemView.getContext(),	"supp "+currentAlarm.getMessage(),
-                                            Toast.LENGTH_SHORT).show();
+                                    cancelAlarm(currentAlarm.getId());
                                     FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("alarmes").child("alarm"+ currentAlarm.getId())
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
@@ -154,6 +154,14 @@ public class MedicamentAdapter extends RecyclerView.Adapter<MedicamentAdapter.My
 
             img.setContentDescription("alarm");
         }
+        public void cancelAlarm(int id){
+            AlarmManager alarmManager =(AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+            Intent intent =new Intent(mContext,AlertReceiver.class);
+            PendingIntent pendingIntent=PendingIntent.getBroadcast(mContext,id,intent,0);
+            alarmManager.cancel(pendingIntent);
+            Toast.makeText(mContext, "Alarme OFF", Toast.LENGTH_LONG).show(); //Generate a toast only if you want
+        }
+
     }
 
 }

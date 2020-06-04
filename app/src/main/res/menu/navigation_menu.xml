@@ -21,6 +21,7 @@
                     android:id="@+id/logout"
                     android:icon="@drawable/ic_logout"
                     android:title="Déconnecté" />
+
             </group>
         </menu>
     </item>
@@ -31,6 +32,14 @@
                 android:id="@+id/share"
                 android:icon="@drawable/ic_share"
                 android:title="Partager votre ID" />
+        </menu>
+    </item>
+    <item android:title="paramètres">
+        <menu>
+            <item
+                android:id="@+id/settings"
+                android:icon="@android:drawable/ic_menu_preferences"
+                android:title="paramètres" />
         </menu>
     </item>
 </menu>

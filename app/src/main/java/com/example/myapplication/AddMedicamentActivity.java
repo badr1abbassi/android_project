@@ -13,6 +13,7 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -23,7 +24,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,7 +33,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -89,10 +88,8 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     public static  final int STORAGE_REQUEST_CODE1 = 401;
     public static  final int IMAGE_PICK_GALLERY_CODE1 = 1003;
     public static  final int IMAGE_PICK_CAMERA_CODE1 = 1002;
-    Date madate;
     private StorageReference mStorageReference;
     private DatabaseReference mDatabaseReference;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -35,13 +35,12 @@ public class LocalisationService extends IntentService {
         super("LocalisationService");
     }
 
-
     @Override
     protected void onHandleIntent(Intent workIntent) {
         while (true) {
             getMyPosition();
             try {
-                Thread.sleep(6000);
+                Thread.sleep(30000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }finally {
@@ -121,4 +120,5 @@ public class LocalisationService extends IntentService {
         });
         }
     }
+
 }
