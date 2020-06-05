@@ -69,4 +69,19 @@ public class NotificationHelper extends ContextWrapper {
                 .setSound( RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), AudioManager.STREAM_MUSIC)
                 .setContentIntent(contentIntent);
     }
+
+    public NotificationCompat.Builder getAlerteNotification() throws IOException {
+        long[] v = {500,1000};
+        Intent activityIntent = new Intent(this, Parametres.class);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this,
+                0, activityIntent, 0);
+        return new NotificationCompat.Builder(getApplicationContext(),channelID)
+                .setSmallIcon(R.drawable.ic_alarm)
+                .setContentTitle("Alerte")
+                .setContentText("desactiver l'alerte :")
+                .setVibrate(v)
+                .setSound( RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), AudioManager.STREAM_MUSIC)
+                .setContentIntent(contentIntent);
+    }
 }

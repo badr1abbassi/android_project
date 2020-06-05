@@ -10,7 +10,9 @@
         <item name="actionModeBackground">@color/colorPrimary</item>
         <item name="actionMenuTextColor">#fff</item>
     </style>
-
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+    </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

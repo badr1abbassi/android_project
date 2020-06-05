@@ -43,10 +43,22 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:paddingLeft="32dp"
+                            android:layout_marginRight="16dp"
                             android:paddingTop="8dp"
                             android:paddingRight="32dp"
                             android:paddingBottom="4dp"
                             android:text="@string/convert"
+                            android:textAlignment="center" />
+                        <Button
+                            android:id="@+id/bt_stop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingLeft="32dp"
+                            android:paddingTop="8dp"
+                            android:paddingRight="32dp"
+                            android:paddingBottom="4dp"
+                            android:text="Annuler"
                             android:textAlignment="center" />
 
                     </LinearLayout>
@@ -93,10 +105,14 @@
 
                     <ImageView
                         android:id="@+id/imageIv"
+                        android:scaleType="fitStart"
+                        android:adjustViewBounds="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="@null"
-                        android:maxHeight="250dp" />
+                        android:contentDescription="@string/l_image_du_texte"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

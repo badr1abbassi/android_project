@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -29,7 +30,6 @@ public class LocalisationManager extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 11;
 
     LocationManager locationManager;
-    String lattitude,longitude;
     Coordonee cord=new Coordonee();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,17 +87,16 @@ public class LocalisationManager extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
                         startActivity(new Intent(LocalisationManager.this, LinkAccountActivity.class));
+
         FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.linkedId)
                 .child("Localisation").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                         cord=dataSnapshot.getValue(Coordonee.class);
-                        System.out.println("hhhhhhhhhhhhhhhhhhhhhh"+cord.getLatitude());
                         sendLocalisation(cord);
                     return;
                 } else {
-                    System.out.println("pbbbbbbbbbbbbbbbbbb"+cord.getLatitude());
                     return;
 
                 }
@@ -133,8 +132,7 @@ public class LocalisationManager extends AppCompatActivity {
     public void getMyPosition(View view) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Intent intent1 = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent1);
+            noGPSError();
 
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
@@ -172,21 +170,41 @@ public class LocalisationManager extends AppCompatActivity {
                 cord.setLatitude(String.valueOf(latti));
                 cord.setLongitude(String.valueOf(longi));
             } else {
-                Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Impossible de suivre votre position", Toast.LENGTH_SHORT).show();
             }
             if(cord.getLongitude()!=null && cord.getLatitude() !=null){
-                Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Votre position actuelle est" + "\n" + "Lattitude = " + cord.getLatitude()
+                        + "\n" + "Longitude = " + cord.getLongitude(), Toast.LENGTH_SHORT).show();
                 sendLocalisation(cord);
             }else{
-                Toast.makeText(this, "makayn walo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
             }
         }
     }
     protected void buildAlertMessageNoGps() {
         Toast.makeText(this, "activer gps", Toast.LENGTH_SHORT).show();
     }
-    
-    
-    
+
+    public void noGPSError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Votre GPS est désactiver")
+                .setMessage("Voulez vous activer le GPS ?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(R.drawable.gps)
+                .show();
+    }
+
+
 }

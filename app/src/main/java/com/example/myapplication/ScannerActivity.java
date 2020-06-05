@@ -43,7 +43,7 @@ import java.util.Locale;
 public class ScannerActivity extends AppCompatActivity {
     TextInputLayout mResultET;
     ImageView mPreviewIv;
-    Button btConvert;
+    Button btConvert,btAnnuler;
     TextToSpeech textToSpeech;
 
     public static  final int CAMERA_REQUEST_CODE = 200;
@@ -67,6 +67,7 @@ public class ScannerActivity extends AppCompatActivity {
         mResultET = findViewById(R.id.resultEt);
         mPreviewIv = findViewById(R.id.imageIv);
         btConvert = findViewById(R.id.bt_convert);
+        btAnnuler=findViewById(R.id.bt_stop);
         cameraPermission = new String [] {Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -87,6 +88,13 @@ public class ScannerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String s = mResultET.getEditText().getText().toString();
                 int speech = textToSpeech.speak(s,TextToSpeech.QUEUE_FLUSH,null);
+
+            }
+        });
+        btAnnuler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textToSpeech.stop();
             }
         });
     }
@@ -158,7 +166,7 @@ public class ScannerActivity extends AppCompatActivity {
 
     private void pickCamera() {
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE,"NewPic");
+        values.put(MediaStore.Images.Media.TITLE,"nouvelle image");
         values.put(MediaStore.Images.Media.DESCRIPTION,"Image To text");
         image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 

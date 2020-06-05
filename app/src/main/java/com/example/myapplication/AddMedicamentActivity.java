@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -61,8 +63,9 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
 
     public static  final int ALARME_CODE = 250;
     private TimePicker alarmTimePicker;
-    private EditText alarmTextView;
+    private TextInputLayout alarmTextView;
     TextView date;
+    ImageView displayImage;
     Calendar c;
     //date + time
     private int minute=0;
@@ -84,10 +87,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     ImageButton image;
     Uri resultUri;
     Date madate;
-    public static  final int CAMERA_REQUEST_CODE1 = 201;
-    public static  final int STORAGE_REQUEST_CODE1 = 401;
-    public static  final int IMAGE_PICK_GALLERY_CODE1 = 1003;
-    public static  final int IMAGE_PICK_CAMERA_CODE1 = 1002;
+
     private StorageReference mStorageReference;
     private DatabaseReference mDatabaseReference;
     @Override
@@ -95,6 +95,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
         image=findViewById(R.id.imageIv2);
+        displayImage= findViewById(R.id.displayImage);
         madate=new Date();
         cameraPermission = new String [] {Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -209,7 +210,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case CAMERA_REQUEST_CODE1:
+            case ScannerActivity.CAMERA_REQUEST_CODE:
                 if(grantResults.length >0) {
                     boolean cameraAccepted = grantResults [0] ==
                             PackageManager.PERMISSION_GRANTED;
@@ -223,7 +224,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
                     }
                 }
                 break;
-            case STORAGE_REQUEST_CODE1:
+            case ScannerActivity.STORAGE_REQUEST_CODE:
                 if(grantResults.length >0) {
                     boolean writeStorageAccepted = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
@@ -241,11 +242,11 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == IMAGE_PICK_GALLERY_CODE1) {
+            if (requestCode == ScannerActivity.IMAGE_PICK_GALLERY_CODE) {
                 CropImage.activity(data.getData())
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
-            if (requestCode == IMAGE_PICK_CAMERA_CODE1) {
+            if (requestCode == ScannerActivity.IMAGE_PICK_CAMERA_CODE) {
                 CropImage.activity(image_uri)
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
@@ -259,7 +260,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
                 resultUri = result.getUri();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),resultUri);
-                    image.setImageBitmap(bitmap);
+                    displayImage.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -274,7 +275,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     }
 
     public void setAlarm(View v){
-        message=alarmTextView.getText().toString();
+        message=alarmTextView.getEditText().getText().toString();
         medicamentInfos =new MedicamentInfos();
         medicamentInfos.setRepeat(repeat);
         medicamentInfos.setMessage(message);
@@ -287,8 +288,9 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         madate.setMinute(this.minute);
         medicamentInfos.setDate(madate);
 
-        if(TextUtils.isEmpty(alarmTextView.getText())){
-            alarmTextView.setError( "medicament obligatoire !" );
+        if(TextUtils.isEmpty(alarmTextView.getEditText().getText())){
+            alarmTextView.setError( "Le nom du medicament est obligatoire !" );
+            alarmTextView.requestFocus();
         }else {
             medicamentInfos.setId(ListeMedicamentActivity.listeAlarmes.size()+1);
             uploadImage(medicamentInfos.getId());
@@ -384,6 +386,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         madate.setMonth(this.month);
         madate.setDayOfMonth(this.dayOfMonth);
         date.setText(this.dayOfMonth+"/"+this.month+"/"+this.year);
+        date.setContentDescription(this.dayOfMonth+"/"+this.month+"/"+this.year);
     }
 
     public void startAlarm(MedicamentInfos medicamentInfos) throws ParseException {

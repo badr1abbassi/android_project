@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -49,7 +50,7 @@ public class TacheActivity extends AppCompatActivity implements NoteEventListene
     private NotesDao dao;
     private MainActionModeCallback actionModeCallback;
     private int chackedCount = 0;
-    private FloatingActionButton fab;
+    private ImageButton fab;
     private SharedPreferences settings;
     public static final String THEME_Key = "app_theme";
     public static final String APP_PREFERENCES="notepad_settings";
@@ -68,7 +69,7 @@ public class TacheActivity extends AppCompatActivity implements NoteEventListene
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // init fab Button
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +89,7 @@ public class TacheActivity extends AppCompatActivity implements NoteEventListene
         // set listener to adapter
         this.adapter.setListener(this);
         this.recyclerView.setAdapter(adapter);
+
         showEmptyView();
         // add swipe helper to recyclerView
 

@@ -17,14 +17,14 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/logo"
             android:elevation="4dp"
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" tools:targetApi="lollipop" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="230dp"
-                            android:background="#E1EAE6"
+                            android:background="@color/background"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -60,7 +60,7 @@
                                 android:layout_width="190dp"
                                 android:layout_height="190dp"
                                 android:layout_gravity="center"
-                                android:contentDescription="@string/todo"
+                                android:contentDescription="@string/logo_help_me"
                                 android:src="@drawable/logo" />
 
                         </LinearLayout>
@@ -111,6 +111,7 @@
 
                                         <Button
                                             android:id="@+id/buttonLocalisation"
+                                            android:contentDescription="@string/localisation"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:background="@android:color/transparent" />
@@ -134,7 +135,7 @@
                                             android:layout_width="50dp"
                                             android:layout_height="50dp"
                                             android:layout_centerInParent="true"
-                                            android:contentDescription="TODO"
+                                            android:contentDescription="@string/todo"
                                             android:src="@drawable/camera" />
 
                                         <TextView
@@ -151,6 +152,7 @@
                                             android:id="@+id/buttonCamera"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
+                                            android:contentDescription="@string/image_au_parole"
                                             android:background="@android:color/transparent" />
                                     </RelativeLayout>
                                 </androidx.cardview.widget.CardView>
@@ -168,7 +170,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_marginRight="5dp"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="5dp">
 
                                     <RelativeLayout
                                         android:layout_width="match_parent"
@@ -179,7 +182,8 @@
                                             android:layout_width="50dp"
                                             android:layout_height="50dp"
                                             android:layout_centerInParent="true"
-                                            android:src="@drawable/call" />
+                                            android:src="@drawable/call"
+                                            android:contentDescription="@string/todo" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -188,11 +192,12 @@
                                             android:layout_centerHorizontal="true"
                                             android:layout_marginTop="10dp"
                                             android:layout_marginBottom="10dp"
-                                            android:text="APPEL"
+                                            android:text="@string/appel"
                                             android:textSize="16sp" />
 
                                         <Button
                                             android:id="@+id/buttonAppel"
+                                            android:contentDescription="@string/appel_rapide"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:background="@android:color/transparent" />
@@ -204,7 +209,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="5dp"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="5dp">
 
                                     <RelativeLayout
                                         android:layout_width="match_parent"
@@ -215,7 +221,8 @@
                                             android:layout_width="50dp"
                                             android:layout_height="50dp"
                                             android:layout_centerInParent="true"
-                                            android:src="@drawable/health" />
+                                            android:src="@drawable/health"
+                                            android:contentDescription="@string/todo" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -224,11 +231,12 @@
                                             android:layout_centerHorizontal="true"
                                             android:layout_marginTop="10dp"
                                             android:layout_marginBottom="10dp"
-                                            android:text="SANTE"
+                                            android:text="@string/sante"
                                             android:textSize="16sp" />
 
                                         <Button
                                             android:id="@+id/buttonHealth"
+                                            android:contentDescription="@string/alarme"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:background="@android:color/transparent" />
@@ -259,8 +267,8 @@
                                             android:layout_width="50dp"
                                             android:layout_height="50dp"
                                             android:layout_centerInParent="true"
-                                            android:contentDescription="TODO"
-                                            android:src="@drawable/agenda" />
+                                            android:src="@drawable/agenda"
+                                            android:contentDescription="@string/todo" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -285,7 +293,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="5dp"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="5dp">
 
                                     <RelativeLayout
                                         android:layout_width="match_parent"
@@ -306,11 +315,12 @@
                                             android:layout_centerHorizontal="true"
                                             android:layout_marginTop="10dp"
                                             android:layout_marginBottom="10dp"
-                                            android:text="AIDER MOI"
+                                            android:text="@string/aider_moi"
                                             android:textSize="16sp" />
 
                                         <Button
                                             android:id="@+id/buttonChat"
+                                            android:contentDescription="@string/help_me"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:background="@android:color/transparent" />

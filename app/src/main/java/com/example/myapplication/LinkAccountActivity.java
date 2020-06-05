@@ -1,9 +1,13 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -69,6 +73,10 @@ public class LinkAccountActivity extends AppCompatActivity {
     }
 
     public void linkAccount() {
+        if(!isConnected()){
+            noConnectionError();
+            return;
+        }
         if (add.getText().equals("Changer")) {
             userId.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
             btnBack.setVisibility(View.VISIBLE);
@@ -145,5 +153,29 @@ public class LinkAccountActivity extends AppCompatActivity {
 
 
     }
+    public void noConnectionError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Problème de connexion")
+                .setMessage("vérifiez votre connexion et réessayez")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, null)
+                .setIcon(R.drawable.wrong_password)
+                .show();
+    }
+    public boolean  isConnected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else {
+            connected = false;
+        }
+        return connected;
+    }
+
 
 }

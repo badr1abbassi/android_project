@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#4CAF50</color>
-    <color name="colorAccent">#8BC34A</color>
+    <color name="colorPrimary">#2d769f</color>
+    <color name="colorPrimaryDark">#0F567E</color>
+    <color name="colorAccent">#03A9F4</color>
     <color name="colorback">#A5B9C4</color>
 
     <color name="colorPrimaryTache">#FF9800</color>
     <color name="colorPrimaryDarkTache">#F57C00</color>
     <color name="colorAccentTache">#ffa008</color>
     <color name="view_backg_colorTache">#c7c7C7</color>
-    <color name="background">#DEF4EB</color>
-    <color name="logo">#51C3A2</color>
+    <color name="background">#EAFDFC</color>
+    <color name="logo">#2d769f</color>
+    <color name="Twhite">#4Dffffff</color>
+    <color name="Tblack">#4D000000</color>
+
 
     <!--  colors for dark theme -->
     <color name="colorPrimary_dark">#212121</color>

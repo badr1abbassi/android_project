@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-
 public class LocalisationService extends IntentService {
     private static final int REQUEST_LOCATION = 12;
     LocationManager locationManager;
@@ -40,11 +39,11 @@ public class LocalisationService extends IntentService {
         while (true) {
             getMyPosition();
             try {
-                Thread.sleep(30000);
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }finally {
-                System.out.println("salina mn 6 sec");
+            } finally {
+
             }
 
         }
@@ -54,7 +53,7 @@ public class LocalisationService extends IntentService {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-           buildAlertMessageNoGps();
+            buildAlertMessageNoGps();
 
 
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -102,22 +101,23 @@ public class LocalisationService extends IntentService {
         }
 
     }
+
     protected void buildAlertMessageNoGps() {
         Toast.makeText(this, "activer gps", Toast.LENGTH_SHORT).show();
     }
 
 
-    public void saveLocalisation(Coordonee c){
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+    public void saveLocalisation(Coordonee c) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Localisation")
                     .setValue(c).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
                         //Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
                     }
                 }
-        });
+            });
         }
     }
 

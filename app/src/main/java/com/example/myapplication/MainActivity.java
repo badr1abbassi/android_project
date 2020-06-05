@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static User Cuser, linkedUser;
     DatabaseReference ref;
 
-    Button localisation, camera, appel, sante, taches, aider;
+    Button localisation, camera, sante, taches, aider;
+    public static Button appel;
     private static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
     String lattitude, longitude;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String lName = "lnameKey";
     public static final String lEmail = "lemailKey";
     public static final String lphone = "lphoneKey";
+    public static final String accel = "accKey";
+    public static final String loc = "locKey";
 
 
     @Override
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         camera = findViewById(R.id.buttonCamera);
         appel = findViewById(R.id.buttonAppel);
         taches = findViewById(R.id.buttonTaches);
-        aider= findViewById(R.id.buttonChat);
+        aider = findViewById(R.id.buttonChat);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
@@ -83,7 +86,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
+        Parametres.accStatus = sharedpreferences.getBoolean(accel, false);
+        Parametres.locStatus = sharedpreferences.getBoolean(loc, false);
 
+        if (Parametres.accStatus) {
+            startService(new Intent(this, MyService.class));
+        } else {
+            stopService(new Intent(this, MyService.class));
+        }
+
+        if (!Parametres.locStatus) {
+            stopService(new Intent(this, LocalisationService.class));
+        } else {
+            startService(new Intent(this, LocalisationService.class));
+        }
         if (isConnected()) {
             if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                 finish();
@@ -99,11 +117,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sharedpreferences = getSharedPreferences(mypreference,
                     Context.MODE_PRIVATE);
             if (sharedpreferences.contains(Name)) {
-                Cuser = new User(sharedpreferences.getString(Email, ""),sharedpreferences.getString(phone, ""),sharedpreferences.getString(Name, ""));
-                linkedUser = new User(sharedpreferences.getString(lEmail, ""),sharedpreferences.getString(lphone, ""),sharedpreferences.getString(lName, ""));
-                linkedId = sharedpreferences.getString(lId,"");
-            }
-            else
+                Cuser = new User(sharedpreferences.getString(Email, ""), sharedpreferences.getString(phone, ""), sharedpreferences.getString(Name, ""));
+                linkedUser = new User(sharedpreferences.getString(lEmail, ""), sharedpreferences.getString(lphone, ""), sharedpreferences.getString(lName, ""));
+                linkedId = sharedpreferences.getString(lId, "");
+            } else
                 noConnectionError();
 
         }
@@ -152,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         getPermissionLocalisation();
 
-        ServLocalIntent=new Intent(this,LocalisationService.class);
+        ServLocalIntent = new Intent(this, LocalisationService.class);
         startService(ServLocalIntent);
     }
 
@@ -164,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        if(Cuser!=null && linkedUser!=null) {
+        if (Cuser != null && linkedUser != null) {
             editor.putString(Name, Cuser.getName());
             editor.putString(Email, Cuser.getEmail());
             editor.putString(phone, Cuser.getPhone());
@@ -187,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public boolean  isConnected() {
+    public boolean isConnected() {
         boolean connected = false;
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
@@ -220,15 +237,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.buttonChat:
                 getChat(v);
                 break;
-             default:
+            default:
                 Toast.makeText(this, v.getId() + "", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
     private void getChat(View v) {
-        Intent intent = new Intent(this, MessageActivity.class);
-        this.startActivity(intent);
+        if (linkedUser != null) {
+            Intent intent = new Intent(this, MessageActivity.class);
+            this.startActivity(intent);
+        } else {
+            noLinkedError();
+        }
     }
 
     private void getLocalisation(View v) {
@@ -270,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
             startActivity(new Intent(this, AuthentificationActivity.class));
         } else if (id == R.id.profil) {
-            if (Cuser!=null) {
+            if (Cuser != null) {
                 startActivity(new Intent(this, ProfilActivity.class));
             } else {
                 noConnectionError();
@@ -282,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 noConnectionError();
             }
         } else if (id == R.id.link) {
-            if (linkedUser!=null) {
+            if (linkedUser != null) {
                 startActivity(new Intent(this, LinkAccountActivity.class));
             } else {
                 noConnectionError();
@@ -293,8 +314,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String ident = FirebaseAuth.getInstance().getCurrentUser().getUid();
             myIntent.putExtra(Intent.EXTRA_TEXT, ident);
             startActivity(Intent.createChooser(myIntent, "Partager votre ID"));
-        }else if (id == R.id.settings) {
-            Intent intent=new Intent(this, Parametres.class);
+        } else if (id == R.id.settings) {
+            Intent intent = new Intent(this, Parametres.class);
             startActivity(intent);
         }
 
@@ -303,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getAppel(View v) {
-        if (linkedUser.getPhone()!=null) {
+        if (linkedUser.getPhone() != null) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this,
@@ -352,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.no_network)
                 .show();
     }
 
@@ -416,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     linkedUser = dataSnapshot.getValue(User.class);
-                    System.out.println("aah"+linkedUser.getName());
+                    System.out.println("aah" + linkedUser.getName());
                     return;
                 } else {
                     System.out.println("kaaaaa");

@@ -2,15 +2,24 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+
 import com.example.myapplication.db.NotesDB;
 import com.example.myapplication.db.NotesDao;
 import com.example.myapplication.model.Note;
@@ -23,13 +32,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Date;
 
 
-
 public class EditNoteActivity extends AppCompatActivity {
     private EditText inputNote;
+    private ScrollView linearLayout;
     private NotesDao dao;
     private Note temp;
     public static final String NOTE_EXTRA_Key = "note_id";
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,14 +49,26 @@ public class EditNoteActivity extends AppCompatActivity {
         setTheme(theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
-
+        linearLayout = findViewById(R.id.llnote);
         inputNote = findViewById(R.id.input_note);
         dao = NotesDB.getInstance(this).notesDao();
         if (getIntent().getExtras() != null) {
             int id = getIntent().getExtras().getInt(NOTE_EXTRA_Key, 0);
             temp = dao.getNoteById(id);
             inputNote.setText(temp.getNoteText());
-        } else inputNote.setFocusable(true);
+        } else {
+            inputNote.setFocusable(true);
+        }
+        linearLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                inputNote.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(inputNote, InputMethodManager.SHOW_IMPLICIT);
+                inputNote.setSelection(inputNote.length());
+                return false;
+            }
+        });
 
     }
 

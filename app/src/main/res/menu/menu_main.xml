@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/addImage"
+        android:contentDescription="@string/ajouter_une_image"
         android:title="Add Image"
         app:showAsAction="always"
         android:icon="@drawable/ic_action_image"/>

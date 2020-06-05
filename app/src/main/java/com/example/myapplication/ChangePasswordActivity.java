@@ -83,16 +83,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Log.d("success", "Password updated");
+                                        Toast.makeText(ChangePasswordActivity.this, "Success,votre mot de passe est mis à jour", Toast.LENGTH_LONG).show();
                                         FirebaseAuth.getInstance().signOut();
                                         finish();
                                     } else {
-                                        Log.d("echec", "Error password not updated");
+                                        Toast.makeText(ChangePasswordActivity.this, "Erreur, le mot de passe n'est pas mis à jour", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                         } else {
-                            Log.d("echec", "Error auth failed");
+                            Eoldmdp.setError("Mot de passe incorrecte");
+                            Eoldmdp.requestFocus();
                         }
                     }
                 });
@@ -106,7 +107,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.wrong_password)
                 .show();
     }
     public boolean  isConnected() {

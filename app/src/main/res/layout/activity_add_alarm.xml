@@ -13,47 +13,58 @@
         android:layout_marginBottom="20dp">
 
         <Button
-            android:id="@+id/annulerAlarme"
+            android:id="@+id/EnregistrerAlarme"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
-            android:text="Annuler" />
+            android:textSize="16sp"
+            android:text="@string/sauvegarder" />
 
         <Button
-            android:id="@+id/EnregistrerAlarme"
+            android:id="@+id/annulerAlarme"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
-            android:text="Enregistrer" />
+            android:textSize="16sp"
+            android:contentDescription="@string/annuler"
+            android:text="@string/annuler" />
+
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginBottom="20dp">
 
-        <LinearLayout
+
+        <Button
+            android:id="@+id/date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@string/date"
+            android:text="@string/date" />
 
-            <Button
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="Date" />
-
-            <TextView
-                android:id="@+id/dateMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="Chaque jour" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/dateMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:contentDescription="@string/chaque_jour"
+            android:text="@string/chaque_jour"
+            android:textSize="16sp"
+            android:textStyle="bold"
+           />
 
 
     </LinearLayout>
@@ -68,39 +79,75 @@
 
             android:orientation="vertical">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/alarmText"
+                style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10px"
-                android:gravity="center"
-                android:hint="Entrer votre description" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@string/ajouter_le_nom_du_m_dicament"
+                android:ems="10"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_add"
+                app:startIconTint="@color/logo">
 
 
-            <ImageButton
-                android:id="@+id/imageIv2"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/nom_m_dicament"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/ajouter_une_image"
+                    android:contentDescription="@string/ajouter_une_image"
+                    />
+
+                <ImageButton
+                    android:id="@+id/imageIv2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                   android:layout_marginTop="4dp"
+                    android:background="@drawable/cercle"
+                    android:contentDescription="@string/ajouter_une_image"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp"
+                    app:srcCompat="@drawable/ic_image"
+                    tools:ignore="VectorDrawableCompat" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/displayImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/background"
-                android:paddingLeft="16dp"
-                android:paddingTop="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp"
-                app:srcCompat="@drawable/ic_image"
-                tools:ignore="VectorDrawableCompat" />
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                android:contentDescription="@string/l_image" />
 
             <TimePicker
                 android:id="@+id/alarmTimePicker"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
         </LinearLayout>
     </ScrollView>
 

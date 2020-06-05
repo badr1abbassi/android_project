@@ -17,11 +17,50 @@
     <string name="share_note">Share Note</string>
     <string name="delete_notes">Delete Notes</string>
     <string name="no_notes">No Notes !</string>
-    <string name="logo">logo</string>
     <string name="nav_drawer_open">Ouvrir la bar de navigation</string>
     <string name="nav_drawer_close">Fermer la bar de navigation</string>
     <string name="sauvegarder">Sauvegarder</string>
     <string name="addAcount">Pour lier votre compte avec un autre compte vous devez entrer son identifiant au-dessous</string>
     <string name="ajouter">Ajouter</string>
     <string name="l_identifient">L\'identifient</string>
+    <string name="appel_rapide">appel rapide</string>
+    <string name="ajouter_une_tache">ajouter une tache</string>
+    <string name="aider_moi">AIDER MOI</string>
+    <string name="sante">SANTE</string>
+    <string name="logo">logo</string>
+    <string name="image_au_parole">image au parole</string>
+    <string name="alarme">Alarme</string>
+    <string name="logo_help_me">help me</string>
+    <string name="annuler">Annuler</string>
+    <string name="ajouter_une_image">Ajouter une image</string>
+    <string name="chaque_jour">Chaque jour</string>
+    <string name="ajouter_le_nom_du_m_dicament">Ajouter le nom du médicament</string>
+    <string name="nom_m_dicament">Nom médicament</string>
+    <string name="date">Date</string>
+    <string name="ajouter_une_alarme">Ajouter une alarme</string>
+    <string name="l_image">l\'image</string>
+    <string name="le_memo_est_vide">Le memo est vide !</string>
+    <string name="demander_l_identifiant_d_un_utilisateur">Demander l\'identifiant d\'un utilisateur</string>
+    <string name="appel">appel</string>
+    <string name="que_pensez_vous">Que pensez-vous</string>
+    <string name="crire_votre_note">écrire votre note</string>
+    <string name="local_service_started">started</string>
+    <string name="l_image_du_m_dicament">L\'image du médicament</string>
+    <string name="medicament">Medicament</string>
+    <string name="l_image_du_texte">L\'image du texte</string>
+    <string name="satellite">Satellite</string>
+    <string name="traffic">Traffic</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="email">Email</string>
+    <string name="vous_n_avez_pas_de_compte_s_inscrire">Vous n\'avez pas de compte? S\'inscrire</string>
+    <string name="s_identifier">S\'identifier</string>
+    <string-array name="styles">
+        <item>Standard</item>
+        <item>Silver</item>
+        <item>Retro</item>
+        <item>Dark</item>
+        <item>Night</item>
+        <item>Aubergine</item>
+    </string-array>
+
 </resources>

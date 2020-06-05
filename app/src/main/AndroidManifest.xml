@@ -40,16 +40,16 @@
             android:name=".ChangePasswordActivity"
             android:label="Changer le mot de passe"
             android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".LocalisationManager"
+        <activity android:name=".LocalisationManager"
             android:label="Localisation"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MedicamentActivity"
             android:label="Medicaments"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SplashActivity"
+            android:label="Help me"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,7 +73,7 @@
             android:parentActivityName=".ListeMedicamentActivity" />
         <activity
             android:name=".EditNoteActivity"
-            android:label="Ajouter une note"
+            android:label="Modifier la note"
             android:parentActivityName=".TacheActivity" />
         <activity
             android:name=".TacheActivity"
@@ -126,6 +126,7 @@
 
         <service android:name=".LocalisationService" />
         <service android:name=".MyService" />
+
     </application>
 
 </manifest>
