@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 public class LocalisationManager extends AppCompatActivity {
 
     private Button myLocalisation;
@@ -127,6 +129,7 @@ public class LocalisationManager extends AppCompatActivity {
         Intent intent =new Intent(this,MapsActivity.class);
         intent.putExtra("longitude",c.getLongitude());
         intent.putExtra("lattitude",c.getLatitude());
+        intent.putExtra("dateLocalisation",c.getDateLocalisation());
         startActivity(intent);
     }
 
@@ -152,7 +155,7 @@ public class LocalisationManager extends AppCompatActivity {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
+            cord.setDateLocalisation(Calendar.getInstance().getTime().toString());
             if (location != null) {
                 double latti = location.getLatitude();
                 double longi = location.getLongitude();
@@ -175,8 +178,8 @@ public class LocalisationManager extends AppCompatActivity {
                 Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
             }
             if(cord.getLongitude()!=null && cord.getLatitude() !=null){
-                Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Your current location is" + "\n" + "Lattitude = " + cord.getLatitude()
+                        + "\n" + "Longitude = " + cord.getLongitude(), Toast.LENGTH_SHORT).show();
                 sendLocalisation(cord);
             }else{
                 Toast.makeText(this, "makayn walo", Toast.LENGTH_SHORT).show();

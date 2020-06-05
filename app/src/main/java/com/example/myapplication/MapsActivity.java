@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,8 +16,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    String lattitude,longitude;
-
+    String lattitude,longitude,dateLocal;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +26,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        if(getIntent().getSerializableExtra("longitude")!=null && getIntent().getSerializableExtra("lattitude")!=null){
-
+        textView=findViewById(R.id.dateLocalisation);
+        if(getIntent().getSerializableExtra("longitude")!=null && getIntent().getSerializableExtra("lattitude")!=null
+                && getIntent().getSerializableExtra("dateLocalisation")!=null
+        ){
+            dateLocal=(String) getIntent().getSerializableExtra("dateLocalisation");
             longitude=(String) getIntent().getSerializableExtra("longitude");
             lattitude=(String)getIntent().getSerializableExtra("lattitude");
         }
+        textView.setText("position à: "+dateLocal);
     }
 
 
@@ -47,12 +51,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
-        LatLng pos = new LatLng(Double.valueOf(lattitude),Double.valueOf(longitude));
-
-
+        if (lattitude != null && longitude != null) {
+            LatLng pos = new LatLng(Double.valueOf(lattitude), Double.valueOf(longitude));
         mMap.addMarker(new MarkerOptions().position(pos).title("position actuelle"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 13));
+    }else{
+            Toast.makeText(this, "erreur lors de chargement des donnees", Toast.LENGTH_SHORT).show();
 
+        }
     }
 }
