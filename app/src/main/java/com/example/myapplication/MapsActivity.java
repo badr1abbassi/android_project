@@ -13,8 +13,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.CompoundButtonCompat;
+
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -30,22 +33,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,AdapterView.OnItemSelectedListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, AdapterView.OnItemSelectedListener {
 
     private GoogleMap mMap;
-    String lattitude,longitude;
+    String lattitude, longitude;
     String st;
     Button sat;
     CheckBox traffic;
     Spinner style;
 
     String dateLocal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         ActionBar actionBar = getSupportActionBar();
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -86,7 +89,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
     private void myClick(View v) {
         switch (v.getId()) {
             case R.id.satellite:
@@ -104,10 +106,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     break;
                 }
             case R.id.traffic:
-                if(traffic.isChecked()) {
+                if (traffic.isChecked()) {
                     mMap.setTrafficEnabled(true);
-                }
-                else {
+                } else {
                     mMap.setTrafficEnabled(false);
                 }
 
@@ -134,7 +135,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.addMarker(new MarkerOptions().position(pos).title("position actuelle"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 13));
-        }else{
+        } else {
             Toast.makeText(this, "erreur lors de chargement des donnees", Toast.LENGTH_SHORT).show();
         }
     }
@@ -192,4 +193,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

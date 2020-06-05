@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 noConnectionError();
             }
         } else if (id == R.id.link) {
-            if (linkedUser != null) {
+            if (isConnected()) {
                 startActivity(new Intent(this, LinkAccountActivity.class));
             } else {
                 noConnectionError();
