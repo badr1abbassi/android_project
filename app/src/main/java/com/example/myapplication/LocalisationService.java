@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 
 public class LocalisationService extends IntentService {
     private static final int REQUEST_LOCATION = 12;
@@ -71,7 +72,7 @@ public class LocalisationService extends IntentService {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
+            c.setDateLocalisation(Calendar.getInstance().getTime().toString());
             if (location != null) {
                 double latti = location.getLatitude();
                 double longi = location.getLongitude();

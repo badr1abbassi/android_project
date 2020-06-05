@@ -1,7 +1,11 @@
 package com.example.myapplication;
 
+import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +34,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     CheckBox traffic;
     Spinner style;
 
+    String dateLocal;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         if(getIntent().getSerializableExtra("longitude")!=null && getIntent().getSerializableExtra("lattitude")!=null){
 
+        textView=findViewById(R.id.dateLocalisation);
+        if(getIntent().getSerializableExtra("longitude")!=null && getIntent().getSerializableExtra("lattitude")!=null
+                && getIntent().getSerializableExtra("dateLocalisation")!=null
+        ){
+            dateLocal=(String) getIntent().getSerializableExtra("dateLocalisation");
             longitude=(String) getIntent().getSerializableExtra("longitude");
             lattitude=(String)getIntent().getSerializableExtra("lattitude");
         }
@@ -144,6 +155,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         }
+        textView.setText("position à: "+dateLocal);
     }
 
 

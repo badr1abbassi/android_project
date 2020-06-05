@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -210,7 +211,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case ScannerActivity.CAMERA_REQUEST_CODE:
+            case CAMERA_REQUEST_CODE1:
                 if(grantResults.length >0) {
                     boolean cameraAccepted = grantResults [0] ==
                             PackageManager.PERMISSION_GRANTED;
@@ -224,7 +225,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
                     }
                 }
                 break;
-            case ScannerActivity.STORAGE_REQUEST_CODE:
+            case STORAGE_REQUEST_CODE1:
                 if(grantResults.length >0) {
                     boolean writeStorageAccepted = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
@@ -242,11 +243,11 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == ScannerActivity.IMAGE_PICK_GALLERY_CODE) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE1) {
                 CropImage.activity(data.getData())
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
-            if (requestCode == ScannerActivity.IMAGE_PICK_CAMERA_CODE) {
+            if (requestCode == IMAGE_PICK_CAMERA_CODE1) {
                 CropImage.activity(image_uri)
                         .setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
@@ -260,7 +261,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
                 resultUri = result.getUri();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),resultUri);
-                    displayImage.setImageBitmap(bitmap);
+                    image.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -275,7 +276,7 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
     }
 
     public void setAlarm(View v){
-        message=alarmTextView.getEditText().getText().toString();
+        message=alarmTextView.getText().toString();
         medicamentInfos =new MedicamentInfos();
         medicamentInfos.setRepeat(repeat);
         medicamentInfos.setMessage(message);
@@ -288,9 +289,8 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         madate.setMinute(this.minute);
         medicamentInfos.setDate(madate);
 
-        if(TextUtils.isEmpty(alarmTextView.getEditText().getText())){
-            alarmTextView.setError( "Le nom du medicament est obligatoire !" );
-            alarmTextView.requestFocus();
+        if(TextUtils.isEmpty(alarmTextView.getText())){
+            alarmTextView.setError( "medicament obligatoire !" );
         }else {
             medicamentInfos.setId(ListeMedicamentActivity.listeAlarmes.size()+1);
             uploadImage(medicamentInfos.getId());
@@ -386,7 +386,6 @@ public class AddMedicamentActivity extends AppCompatActivity implements DatePick
         madate.setMonth(this.month);
         madate.setDayOfMonth(this.dayOfMonth);
         date.setText(this.dayOfMonth+"/"+this.month+"/"+this.year);
-        date.setContentDescription(this.dayOfMonth+"/"+this.month+"/"+this.year);
     }
 
     public void startAlarm(MedicamentInfos medicamentInfos) throws ParseException {

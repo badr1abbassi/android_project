@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 public class LocalisationManager extends AppCompatActivity {
 
     private Button myLocalisation;
@@ -30,6 +32,7 @@ public class LocalisationManager extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 11;
 
     LocationManager locationManager;
+    String lattitude,longitude;
     Coordonee cord=new Coordonee();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +97,11 @@ public class LocalisationManager extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                         cord=dataSnapshot.getValue(Coordonee.class);
+                        System.out.println("hhhhhhhhhhhhhhhhhhhhhh"+cord.getLatitude());
                         sendLocalisation(cord);
                     return;
                 } else {
+                    System.out.println("pbbbbbbbbbbbbbbbbbb"+cord.getLatitude());
                     return;
 
                 }
@@ -126,6 +131,7 @@ public class LocalisationManager extends AppCompatActivity {
         Intent intent =new Intent(this,MapsActivity.class);
         intent.putExtra("longitude",c.getLongitude());
         intent.putExtra("lattitude",c.getLatitude());
+        intent.putExtra("dateLocalisation",c.getDateLocalisation());
         startActivity(intent);
     }
 
@@ -170,7 +176,7 @@ public class LocalisationManager extends AppCompatActivity {
                 cord.setLatitude(String.valueOf(latti));
                 cord.setLongitude(String.valueOf(longi));
             } else {
-                Toast.makeText(this, "Impossible de suivre votre position", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
             }
             if(cord.getLongitude()!=null && cord.getLatitude() !=null){
                 Toast.makeText(this, "Votre position actuelle est" + "\n" + "Lattitude = " + cord.getLatitude()
