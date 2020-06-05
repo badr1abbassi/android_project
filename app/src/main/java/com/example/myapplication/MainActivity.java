@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         camera = findViewById(R.id.buttonCamera);
         appel = findViewById(R.id.buttonAppel);
         taches = findViewById(R.id.buttonTaches);
+        aider= findViewById(R.id.buttonChat);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
@@ -136,6 +137,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         taches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myClick(v);
+            }
+        });
+        aider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myClick(v);
@@ -210,10 +217,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.buttonTaches:
                 getTache(v);
                 break;
-            default:
+            case R.id.buttonChat:
+                getChat(v);
+                break;
+             default:
                 Toast.makeText(this, v.getId() + "", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void getChat(View v) {
+        Intent intent = new Intent(this, MessageActivity.class);
+        this.startActivity(intent);
     }
 
     private void getLocalisation(View v) {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MessageActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/background"
+        android:gravity="center"
+        android:padding="20dp"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/logo" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycler_view"
+        android:layout_below="@+id/linearLayout"
+        android:layout_above="@+id/linearLayoutBottom"
+        />
+
+<RelativeLayout
+    android:id="@+id/linearLayoutBottom"
+    android:layout_width="match_parent"
+    android:padding="5dp"
+    android:background="#fff"
+    android:layout_alignParentBottom="true"
+    android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/text_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/btn_send"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:hint="Saisir votre message..."
+        />
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/btn_send"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_action_name"/>
+</RelativeLayout>
+
+
+</RelativeLayout>

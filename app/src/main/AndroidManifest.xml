@@ -24,7 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Parametres"></activity>
+        <activity android:name=".MessageActivity"
+            android:label="Chat"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
+            android:name=".Parametres"
+            android:label="Parametres"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".LinkAccountActivity"
             android:label="Lier votre compte"
@@ -33,9 +40,13 @@
             android:name=".ChangePasswordActivity"
             android:label="Changer le mot de passe"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".LocalisationManager" />
+        <activity
+            android:name=".LocalisationManager"
+            android:label="Localisation"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MedicamentActivity"
+            android:label="Medicaments"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SplashActivity"
@@ -58,7 +69,7 @@
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge" />
         <activity
             android:name=".AddMedicamentActivity"
-            android:label="Ajouter une alarme"
+            android:label="Ajouter un medicament"
             android:parentActivityName=".ListeMedicamentActivity" />
         <activity
             android:name=".EditNoteActivity"
@@ -115,7 +126,6 @@
 
         <service android:name=".LocalisationService" />
         <service android:name=".MyService" />
-
     </application>
 
 </manifest>
