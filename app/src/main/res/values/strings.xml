@@ -4,7 +4,7 @@
     <string name="help_me">HELP ME</string>
     <string name="localisation">LOCALISATION</string>
     <string name="taches">TACHES</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">La date du derniere localisation</string>
     <string name="txt_message">Texte</string>
     <string name="image_preview">L\'image</string>
     <string name="r_sultat">Le texte d\'image</string>
@@ -54,6 +54,7 @@
     <string name="email">Email</string>
     <string name="vous_n_avez_pas_de_compte_s_inscrire">Vous n\'avez pas de compte? S\'inscrire</string>
     <string name="s_identifier">S\'identifier</string>
+    <string name="la_date_de_la_derniere_position">la date de la derniere position</string>
     <string-array name="styles">
         <item>Standard</item>
         <item>Silver</item>
