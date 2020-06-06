@@ -19,7 +19,8 @@
             android:contentDescription="@string/l_image_du_m_dicament"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/message"
